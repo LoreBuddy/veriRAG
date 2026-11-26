@@ -5,7 +5,7 @@ from app.api import router
 
 
 def create_app() -> FastAPI:
-    
+
     app = FastAPI(
         docs_url="/swagger",
         title="veriRAG",
@@ -15,10 +15,11 @@ def create_app() -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        # allow_origins=settings.ALLOWED_ORIGINS,
-        # allow_credentials=True,
-        allow_origins=["*"],
-        allow_credentials=False,  # MUST be False when origins="*"
+        allow_origins=[
+            "https://verirag.ucrossgram.workers.dev",
+            "http://localhost:5173",
+        ],
+        allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
