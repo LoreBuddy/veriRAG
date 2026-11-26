@@ -12,7 +12,6 @@ from app.web_research.contracts import (
     validate_source_id,
 )
 
-
 _SOURCE_TOKEN_RE = re.compile(r"\[(?P<source_id>S[1-9][0-9]{0,2})\](?!\s*\()")
 _MAX_FINAL_CONTENT_BYTES: Final = 2 * 1024 * 1024
 _MAX_SOURCES: Final = 128

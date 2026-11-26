@@ -95,35 +95,35 @@ extend-select = ["ASYNC210", "ASYNC220", "ASYNC221", "ASYNC230", "ASYNC251"]
 [tool.mypy]
 python_version = "3.12"
 files = [
-    "backend_veriRAG/agent/context.py",
-    "backend_veriRAG/agent/runtime.py",
-    "backend_veriRAG/api/routes/auth.py",
-    "backend_veriRAG/auth",
-    "backend_veriRAG/core/errors.py",
-    "backend_veriRAG/events/contracts.py",
-    "backend_veriRAG/events/generated",
-    "backend_veriRAG/guardrails",
-    "backend_veriRAG/infra/auth.py",
-    "backend_veriRAG/providers/core.py",
-    "backend_veriRAG/providers/runtime.py",
-    "backend_veriRAG/rate_limits",
-    "backend_veriRAG/runs/agent_executor.py",
-    "backend_veriRAG/runs/cancellation.py",
-    "backend_veriRAG/runs/repository.py",
-    "backend_veriRAG/runs/service.py",
-    "backend_veriRAG/runs/state.py",
-    "backend_veriRAG/sandbox",
-    "backend_veriRAG/schemas",
-    "backend_veriRAG/security/headers.py",
-    "backend_veriRAG/security/milvus_filters.py",
-    "backend_veriRAG/security/origins.py",
-    "backend_veriRAG/sql_assistant/contracts.py",
-    "backend_veriRAG/threads",
-    "backend_veriRAG/tools/contracts.py",
-    "backend_veriRAG/tools/control.py",
-    "backend_veriRAG/tools/generated",
-    "backend_veriRAG/web_research/citations.py",
-    "backend_veriRAG/web_research/contracts.py",
+    "agent/context.py",
+    "agent/runtime.py",
+    "api/routes/auth.py",
+    "auth",
+    "core/errors.py",
+    "events/contracts.py",
+    "events/generated",
+    "guardrails",
+    "infra/auth.py",
+    "providers/core.py",
+    "providers/runtime.py",
+    "rate_limits",
+    "runs/agent_executor.py",
+    "runs/cancellation.py",
+    "runs/repository.py",
+    "runs/service.py",
+    "runs/state.py",
+    "sandbox",
+    "schemas",
+    "security/headers.py",
+    "security/milvus_filters.py",
+    "security/origins.py",
+    "sql_assistant/contracts.py",
+    "threads",
+    "tools/contracts.py",
+    "tools/control.py",
+    "tools/generated",
+    "web_research/citations.py",
+    "web_research/contracts.py",
 ]
 check_untyped_defs = true
 disallow_untyped_defs = true
@@ -136,7 +136,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 
 [tool.coverage.run]
-source = ["backend", "scripts"]
+source = ["app", "scripts"]
 
 [tool.coverage.report]
 fail_under = 80
