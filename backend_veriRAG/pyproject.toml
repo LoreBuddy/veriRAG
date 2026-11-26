@@ -69,16 +69,16 @@ study = [
 ]
 
 [project.scripts]
-supermew-auth-cleanup = "backend.auth.cleanup:main"
-supermew-indexing-worker = "backend.workers.indexing:main"
-supermew-registry = "backend.tools.registry_cli:main"
+supermew-auth-cleanup = "app.auth.cleanup:main"
+supermew-indexing-worker = "app.workers.indexing:main"
+supermew-registry = "app.tools.registry_cli:main"
 
 [tool.setuptools.packages.find]
-include = ["backend*"]
+include = ["app*"]
 exclude = ["frontend*", "tests*"]
 
 [tool.setuptools.package-data]
-"backend.skills" = ["catalog/*/skill.yaml", "catalog/*/SKILL.md"]
+"app.skills" = ["catalog/*/skill.yaml", "catalog/*/SKILL.md"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
@@ -95,35 +95,35 @@ extend-select = ["ASYNC210", "ASYNC220", "ASYNC221", "ASYNC230", "ASYNC251"]
 [tool.mypy]
 python_version = "3.12"
 files = [
-    "backend/agent/context.py",
-    "backend/agent/runtime.py",
-    "backend/api/routes/auth.py",
-    "backend/auth",
-    "backend/core/errors.py",
-    "backend/events/contracts.py",
-    "backend/events/generated",
-    "backend/guardrails",
-    "backend/infra/auth.py",
-    "backend/providers/core.py",
-    "backend/providers/runtime.py",
-    "backend/rate_limits",
-    "backend/runs/agent_executor.py",
-    "backend/runs/cancellation.py",
-    "backend/runs/repository.py",
-    "backend/runs/service.py",
-    "backend/runs/state.py",
-    "backend/sandbox",
-    "backend/schemas",
-    "backend/security/headers.py",
-    "backend/security/milvus_filters.py",
-    "backend/security/origins.py",
-    "backend/sql_assistant/contracts.py",
-    "backend/threads",
-    "backend/tools/contracts.py",
-    "backend/tools/control.py",
-    "backend/tools/generated",
-    "backend/web_research/citations.py",
-    "backend/web_research/contracts.py",
+    "backend_veriRAG/agent/context.py",
+    "backend_veriRAG/agent/runtime.py",
+    "backend_veriRAG/api/routes/auth.py",
+    "backend_veriRAG/auth",
+    "backend_veriRAG/core/errors.py",
+    "backend_veriRAG/events/contracts.py",
+    "backend_veriRAG/events/generated",
+    "backend_veriRAG/guardrails",
+    "backend_veriRAG/infra/auth.py",
+    "backend_veriRAG/providers/core.py",
+    "backend_veriRAG/providers/runtime.py",
+    "backend_veriRAG/rate_limits",
+    "backend_veriRAG/runs/agent_executor.py",
+    "backend_veriRAG/runs/cancellation.py",
+    "backend_veriRAG/runs/repository.py",
+    "backend_veriRAG/runs/service.py",
+    "backend_veriRAG/runs/state.py",
+    "backend_veriRAG/sandbox",
+    "backend_veriRAG/schemas",
+    "backend_veriRAG/security/headers.py",
+    "backend_veriRAG/security/milvus_filters.py",
+    "backend_veriRAG/security/origins.py",
+    "backend_veriRAG/sql_assistant/contracts.py",
+    "backend_veriRAG/threads",
+    "backend_veriRAG/tools/contracts.py",
+    "backend_veriRAG/tools/control.py",
+    "backend_veriRAG/tools/generated",
+    "backend_veriRAG/web_research/citations.py",
+    "backend_veriRAG/web_research/contracts.py",
 ]
 check_untyped_defs = true
 disallow_untyped_defs = true
