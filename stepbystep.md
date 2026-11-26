@@ -4,31 +4,15 @@
 3. (verirag) PS B:\veriRAG> uv run python -c "from app.infra.database import engine; print(engine.connect().exec_driver_sql('select version()').scalar())"
 PostgreSQL 18.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 20260722 (Red Hat 15.3.1-1), 64-bit
 4. uv run --frozen alembic upgrade head   
-INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
-INFO  [alembic.runtime.migration] Will assume transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade  -> 0001_legacy, legacy schema baseline
-INFO  [alembic.runtime.migration] Running upgrade 0001_legacy -> 0002_runtime, run, event, checkpoint and document catalog schema
-INFO  [alembic.runtime.migration] Running upgrade 0002_runtime -> 0003_messages, append-only message journal idempotency key
-INFO  [alembic.runtime.migration] Running upgrade 0003_messages -> 0004_run_reservations, run reservation, fencing and message links
-INFO  [alembic.runtime.migration] Running upgrade 0004_run_reservations -> 0005_event_journal, durable run event sequence
-INFO  [alembic.runtime.migration] Running upgrade 0005_event_journal -> 0006_native_checkpoints, LangGraph PostgreSQL checkpoint tables and HITL resume metadata
-INFO  [alembic.runtime.migration] Running upgrade 0006_native_checkpoints -> 0007_document_publication, document catalog publication fencing and version-owned storage metadata
-INFO  [alembic.runtime.migration] Running upgrade 0007_document_publication -> 0008_indexing_worker, durable indexing worker leases, cleanup queue, and heartbeats
-INFO  [alembic.runtime.migration] Running upgrade 0008_indexing_worker -> 0009_skill_tool_registry, pin immutable Skill snapshots to durable Runs
-INFO  [alembic.runtime.migration] Running upgrade 0009_skill_tool_registry -> 0010_guardrails_and_sandbox, persist Run guardrail context and ToolAudit policy identity
-INFO  [alembic.runtime.migration] Running upgrade 0010_guardrails_and_sandbox -> 0011_refresh_token_retention, index refresh-token ledger retention scans
-INFO  [alembic.runtime.migration] Running upgrade 0011_refresh_token_retention -> 0012_remove_document_compat, remove retired document compatibility schema
-INFO  [alembic.runtime.migration] Running upgrade 0012_remove_document_compat -> 0013_canonical_thread_schema, rename Thread and Message persistence schema to canonical domain names
-INFO  [alembic.runtime.migration] Running upgrade 0013_canonical_thread_schema -> 0014_model_control_plane, add persistent Model Profiles and role Assignments
-INFO  [alembic.runtime.migration] Running upgrade 0014_model_control_plane -> 0015_run_model_snapshot, freeze non-secret Model Snapshots on Runs
-INFO  [alembic.runtime.migration] Running upgrade 0015_run_model_snapshot -> 0016_rag_evaluation_runtime, add persistent RAG evaluation datasets, jobs and case results
-INFO  [alembic.runtime.migration] Running upgrade 0016_rag_evaluation_runtime -> 0017_rag_eval_provider_stage, record logical provider failure stage for RAG evaluation cases
-INFO  [alembic.runtime.migration] Running upgrade 0017_rag_eval_provider_stage -> 0018_capability_control_plane, add persistent Skill and custom Tool control plane
-
 5. (verirag) PS B:\veriRAG> uv run --frozen python -c "from app.infra.database import assert_schema_current; assert_schema_current(); print('schema current')"
-schema current
-(verirag) PS B:\veriRAG> 
+
+*6. The flow in frontend_veriRAG/src/App.tsx is:*
+1. The app restores its own session on startup. restoreAuthSession() calls the backend’s /auth/refresh endpoint using a refresh-token cookie. If that succeeds, the app has a backend session; if not, it shows the login form.
+2. On login, Supabase checks the email and password. signInWithPassword() returns a Supabase access token. Registration uses signUp(); if email verification is needed, the app shows a notice and stops here.
+3. The frontend exchanges the Supabase token with the backend. It posts the token to /auth/supabase/exchange.
+4. The backend verifies the token with Supabase. It gets the verified user ID and confirmed email, then finds or creates the corresponding local user.
+5. The backend creates its own session. It returns an access token and sets a refresh-token cookie. The frontend signs out of the local Supabase client, then saves the backend session with installAuthSession().
+6. The app loads the signed-in workspace. It lists the user’s threads and fetches the capability catalog. Subsequent API requests use the backend access token; when needed, the app refreshes it through the refresh-token cookie.
+So the short version is: Supabase verifies the credentials; then your backend verifies the Supabase token, maps the user, and issues the session used by the app.
 
 
-
-uv run --no-sync python -m backend.workers.indexing 

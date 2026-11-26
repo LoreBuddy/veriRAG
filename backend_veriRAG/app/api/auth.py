@@ -109,9 +109,7 @@ def exchange_supabase_session(
 
 
 @authRou.post("/auth/refresh", response_model=AuthResponse)
-def refresh(
-    request: Request,
-    response: Response,
+def refresh(request: Request,   response: Response,
     _origin_guard: None = Depends(_trusted_auth_origin),
     db: Session = Depends(get_db),
 ) -> AuthResponse:

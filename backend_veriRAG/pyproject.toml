@@ -17,3 +17,4 @@ extend-exclude = ["volumes"]
 
 [tool.ruff.lint]
 extend-select = ["ASYNC210", "ASYNC220", "ASYNC221", "ASYNC230", "ASYNC251"]
+ignore = ["B008"]
