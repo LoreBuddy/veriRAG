@@ -12,7 +12,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from app.sandbox.contracts import validate_image_digest
 from app.security.origins import canonical_http_origin
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_ROOT = BACKEND_ROOT.parent
 ENV_FILE = BACKEND_ROOT / ".env"
