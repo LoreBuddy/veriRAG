@@ -21,7 +21,7 @@ from app.schemas.capabilities import (
     WebResearchConfigUpdateRequest,
 )
 
-router = APIRouter(prefix="/v1", tags=["capabilities"])
+capRou = APIRouter(prefix="/v1", tags=["capabilities"])
 
 
 def get_capability_catalog() -> CapabilityCatalog:
@@ -47,7 +47,7 @@ async def _apply(service: CapabilityControlService) -> None:
     await run_in_threadpool(service.apply_runtime)
 
 
-@router.get("/capabilities", response_model=CapabilityResponse)
+@capRou.get("/capabilities", response_model=CapabilityResponse)
 def get_capabilities(
     current_user: User = Depends(get_current_user),
     catalog: CapabilityCatalog = Depends(get_capability_catalog),
@@ -57,7 +57,7 @@ def get_capabilities(
     )
 
 
-@router.get(
+@capRou.get(
     "/capabilities/control-plane",
     response_model=CapabilityControlPlaneResponse,
 )
@@ -71,7 +71,7 @@ async def get_capability_control_plane(
     )
 
 
-@router.post(
+@capRou.post(
     "/capabilities/skills",
     response_model=CapabilityControlPlaneResponse,
     status_code=status.HTTP_201_CREATED,
@@ -93,7 +93,7 @@ async def create_managed_skill(
     )
 
 
-@router.put(
+@capRou.put(
     "/capabilities/skills/{name}",
     response_model=CapabilityControlPlaneResponse,
 )
@@ -116,7 +116,7 @@ async def update_managed_skill(
     )
 
 
-@router.delete(
+@capRou.delete(
     "/capabilities/skills/{name}",
     response_model=CapabilityDeleteResponse,
 )
@@ -135,7 +135,7 @@ async def delete_managed_skill(
     return CapabilityDeleteResponse(name=name)
 
 
-@router.post(
+@capRou.post(
     "/capabilities/tools",
     response_model=CapabilityControlPlaneResponse,
     status_code=status.HTTP_201_CREATED,
@@ -157,7 +157,7 @@ async def create_managed_tool(
     )
 
 
-@router.put(
+@capRou.put(
     "/capabilities/tools/{name}",
     response_model=CapabilityControlPlaneResponse,
 )
@@ -180,7 +180,7 @@ async def update_managed_tool(
     )
 
 
-@router.delete(
+@capRou.delete(
     "/capabilities/tools/{name}",
     response_model=CapabilityDeleteResponse,
 )
@@ -199,7 +199,7 @@ async def delete_managed_tool(
     return CapabilityDeleteResponse(name=name)
 
 
-@router.put(
+@capRou.put(
     "/capabilities/sql-assistant",
     response_model=CapabilityControlPlaneResponse,
 )
@@ -220,7 +220,7 @@ async def update_sql_assistant(
     )
 
 
-@router.put(
+@capRou.put(
     "/capabilities/web-research",
     response_model=CapabilityControlPlaneResponse,
 )
@@ -244,5 +244,5 @@ async def update_web_research(
 __all__ = [
     "get_capability_catalog",
     "get_capability_control_service",
-    "router",
+    "capRou",
 ]
