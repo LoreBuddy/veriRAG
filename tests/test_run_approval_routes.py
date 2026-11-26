@@ -5,8 +5,8 @@ import pytest
 from pydantic import ValidationError
 
 import backend.api.routes.runs as routes
-from backend.core.errors import AppError, ErrorCode
-from backend.schemas.runs import RunCreateRequest
+from app.core.errors import AppError, ErrorCode
+from app.schemas.runs import RunCreateRequest
 
 
 def _request(*approved_tools: str) -> RunCreateRequest:

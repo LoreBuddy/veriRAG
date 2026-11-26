@@ -4,18 +4,18 @@ import asyncio
 import re
 import unittest
 
-from backend.rate_limits.adapters import (
+from app.rate_limits.adapters import (
     InMemoryRateLimitAdapter,
     RedisRateLimitAdapter,
 )
-from backend.rate_limits.contracts import (
+from app.rate_limits.contracts import (
     RateLimitCheck,
     RateLimitPolicy,
     RateLimitSnapshot,
     RateLimitUnavailable,
 )
-from backend.rate_limits.limiter import RateLimiter
-from backend.rate_limits.policy import (
+from app.rate_limits.limiter import RateLimiter
+from app.rate_limits.policy import (
     AUTH_LOGIN_POLICY,
     AUTH_LOGOUT_POLICY,
     AUTH_REFRESH_POLICY,

@@ -7,17 +7,17 @@ import pytest
 from pydantic import SecretStr, ValidationError
 from starlette.responses import Response
 
-from backend.api.routes import auth as auth_routes
-from backend.auth.supabase import (
+from app.api.routes import auth as auth_routes
+from app.auth.supabase import (
     SupabaseAuthUnavailable,
     SupabaseIdentity,
     SupabaseTokenRejected,
     verify_supabase_access_token,
 )
-from backend.auth.service import TokenGrant
-from backend.core.settings import SecuritySettings
-from backend.db.models import User
-from backend.schemas import SupabaseExchangeRequest
+from app.auth.service import TokenGrant
+from app.core.settings import SecuritySettings
+from app.db.models import User
+from app.schemas import SupabaseExchangeRequest
 
 
 def _settings() -> SecuritySettings:

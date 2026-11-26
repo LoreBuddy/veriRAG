@@ -1,7 +1,7 @@
 1. register Aiven pg
 2. .env
     DATABASE_URL=postgresql+psycopg2://avnadmin:pwd@pg-service-aixpertlab.k.aivencloud.com:21906/defaultdb?sslmode=require
-3. (verirag) PS B:\veriRAG> uv run python -c "from backend.infra.database import engine; print(engine.connect().exec_driver_sql('select version()').scalar())"
+3. (verirag) PS B:\veriRAG> uv run python -c "from app.infra.database import engine; print(engine.connect().exec_driver_sql('select version()').scalar())"
 PostgreSQL 18.7 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 15.3.1 20260722 (Red Hat 15.3.1-1), 64-bit
 4. uv run --frozen alembic upgrade head   
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
@@ -25,7 +25,7 @@ INFO  [alembic.runtime.migration] Running upgrade 0015_run_model_snapshot -> 001
 INFO  [alembic.runtime.migration] Running upgrade 0016_rag_evaluation_runtime -> 0017_rag_eval_provider_stage, record logical provider failure stage for RAG evaluation cases
 INFO  [alembic.runtime.migration] Running upgrade 0017_rag_eval_provider_stage -> 0018_capability_control_plane, add persistent Skill and custom Tool control plane
 
-5. (verirag) PS B:\veriRAG> uv run --frozen python -c "from backend.infra.database import assert_schema_current; assert_schema_current(); print('schema current')"
+5. (verirag) PS B:\veriRAG> uv run --frozen python -c "from app.infra.database import assert_schema_current; assert_schema_current(); print('schema current')"
 schema current
 (verirag) PS B:\veriRAG> 
 

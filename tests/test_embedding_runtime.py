@@ -4,13 +4,13 @@ import threading
 import time
 import unittest
 
-from backend.providers.core import ProviderCode, ProviderError, ProviderPolicy
-from backend.providers.embedding import (
+from app.providers.core import ProviderCode, ProviderError, ProviderPolicy
+from app.providers.embedding import (
     EmbeddingRuntime,
     EmbeddingScope,
     EmbeddingService,
 )
-from backend.providers.loop_bridge import ProviderLoopBridge
+from app.providers.loop_bridge import ProviderLoopBridge
 
 
 class RecordingModel:

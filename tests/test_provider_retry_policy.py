@@ -3,7 +3,7 @@ import time
 import unittest
 from unittest.mock import patch
 
-from backend.providers import (
+from app.providers import (
     ProviderCallContext,
     ProviderCode,
     ProviderError,

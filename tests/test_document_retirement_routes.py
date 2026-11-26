@@ -7,8 +7,8 @@ from unittest.mock import patch
 import pytest
 
 import backend.api.routes.documents as documents
-from backend.core.errors import AppError, ErrorCode
-from backend.documents.catalog import CleanupJobStatus
+from app.core.errors import AppError, ErrorCode
+from app.documents.catalog import CleanupJobStatus
 
 
 _NOW = datetime(2026, 7, 16, 12, 0, 0)

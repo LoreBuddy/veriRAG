@@ -5,8 +5,8 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from backend.runs.request_context import RunRequestContext
-from backend.web_research.contracts import WebEvidence, WebResearchResult
+from app.runs.request_context import RunRequestContext
+from app.web_research.contracts import WebEvidence, WebResearchResult
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

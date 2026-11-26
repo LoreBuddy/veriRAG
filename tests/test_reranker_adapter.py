@@ -9,13 +9,13 @@ from typing import Any
 import httpx
 import pytest
 
-from backend.providers.core import (
+from app.providers.core import (
     ProviderCode,
     ProviderError,
     ProviderExecutor,
     ProviderPolicy,
 )
-from backend.providers.rerank import (
+from app.providers.rerank import (
     DisabledRerankerAdapter,
     HttpxRerankerAdapter,
     RerankerProvider,

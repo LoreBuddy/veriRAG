@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from backend.providers import ProviderCode, ProviderError, ProviderExecutor
+from app.providers import ProviderCode, ProviderError, ProviderExecutor
 from test_rag_latency_guards import load_utils
 
 

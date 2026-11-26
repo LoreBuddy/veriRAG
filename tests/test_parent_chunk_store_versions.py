@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.db.models import ParentChunk
+from app.db.models import ParentChunk
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

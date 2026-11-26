@@ -3,13 +3,13 @@ import asyncio
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from backend.api.resources import (
+from app.api.resources import (
     document_catalog,
     document_publication,
 )
-from backend.capabilities.control_service import capability_control_service
-from backend.providers.runtime import provider_runtime
-from backend.sandbox import get_sandbox_runtime
+from app.capabilities.control_service import capability_control_service
+from app.providers.runtime import provider_runtime
+from app.sandbox import get_sandbox_runtime
 
 
 router = APIRouter(tags=["health"])

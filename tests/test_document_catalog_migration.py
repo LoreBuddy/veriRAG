@@ -6,7 +6,7 @@ from pathlib import Path
 from alembic import command
 from sqlalchemy import create_engine, inspect, text
 
-from backend.infra.database import alembic_config
+from app.infra.database import alembic_config
 
 
 class DocumentCatalogMigrationTests(unittest.TestCase):

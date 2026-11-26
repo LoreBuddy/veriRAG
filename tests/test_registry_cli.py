@@ -1,7 +1,7 @@
 import json
 
 import backend.tools.registry_cli as registry_cli
-from backend.tools.registry_cli import main
+from app.tools.registry_cli import main
 
 
 def test_registry_cli_validates_and_lists_safe_catalog(capsys):

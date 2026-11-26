@@ -6,10 +6,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.auth.cleanup import purge_refresh_token_batch
-from backend.core.settings import SecuritySettings
-from backend.db.models import RefreshToken, User
-from backend.infra.database import Base
+from app.auth.cleanup import purge_refresh_token_batch
+from app.core.settings import SecuritySettings
+from app.db.models import RefreshToken, User
+from app.infra.database import Base
 
 
 def test_refresh_ledger_cleanup_waits_until_expiry_plus_retention():

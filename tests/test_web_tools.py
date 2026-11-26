@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from backend.core.settings import WebResearchSettings
-from backend.runs.request_context import RunRequestContext
-from backend.tools.catalog import (
+from app.core.settings import WebResearchSettings
+from app.runs.request_context import RunRequestContext
+from app.tools.catalog import (
     build_default_tool_registry,
     configured_secret_names,
 )
-from backend.tools.contracts import TOOL_RESULT_V1_SCHEMA, ToolResultV1
-from backend.tools.registry import ToolAccess, ToolExposure
-from backend.web_research.contracts import (
+from app.tools.contracts import TOOL_RESULT_V1_SCHEMA, ToolResultV1
+from app.tools.registry import ToolAccess, ToolExposure
+from app.web_research.contracts import (
     WebEvidence,
     WebResearchLimits,
     WebResearchResult,
 )
-from backend.web_research.runtime import WebResearchError, WebResearchErrorCode
+from app.web_research.runtime import WebResearchError, WebResearchErrorCode
 
 
 NOW = datetime(2026, 8, 30, tzinfo=timezone.utc)

@@ -3,7 +3,7 @@ import threading
 import time
 import unittest
 
-from backend.providers.loop_bridge import ProviderLoopBridge
+from app.providers.loop_bridge import ProviderLoopBridge
 
 
 class ProviderLoopBridgeTests(unittest.TestCase):

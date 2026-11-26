@@ -12,8 +12,8 @@ from sqlalchemy.pool import StaticPool
 
 import backend.documents.worker as worker_module
 import backend.documents.catalog as catalog_module
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import (
     Base,
     DocumentCleanupJob,
     DocumentVersion,
@@ -22,7 +22,7 @@ from backend.db.models import (
     User,
     utcnow,
 )
-from backend.documents.catalog import (
+from app.documents.catalog import (
     BuildProfile,
     CleanupBuild,
     CleanupJobExecution,
@@ -32,11 +32,11 @@ from backend.documents.catalog import (
     ManifestEntry,
     VersionBuild,
 )
-from backend.documents.publication import (
+from app.documents.publication import (
     DocumentPublication,
     DocumentPublicationConfig,
 )
-from backend.documents.worker import (
+from app.documents.worker import (
     IndexingWorker,
     IndexingWorkerConfig,
     default_indexing_worker_id,

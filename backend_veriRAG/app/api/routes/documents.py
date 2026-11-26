@@ -5,20 +5,20 @@ from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, UploadFile
 
-from backend.api.resources import (
+from app.api.resources import (
     delete_document_transactionally,
     document_catalog,
     document_publication,
     ensure_upload_dir,
 )
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import User
-from backend.documents.catalog import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import User
+from app.documents.catalog import (
     CleanupJobStatus,
     DocumentRecord,
 )
-from backend.infra.auth import require_admin
-from backend.schemas import (
+from app.infra.auth import require_admin
+from app.schemas import (
     DocumentDeleteJobResponse,
     DocumentDeleteStartResponse,
     DocumentInfo,
@@ -26,7 +26,7 @@ from backend.schemas import (
     DocumentUploadJobResponse,
     DocumentUploadStartResponse,
 )
-from backend.security.uploads import store_upload
+from app.security.uploads import store_upload
 
 
 router = APIRouter(tags=["documents"])

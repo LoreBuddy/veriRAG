@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from backend.model_control import (
+from app.model_control import (
     ModelRole,
     ModelRuntimeSpec,
     build_model_catalog_snapshot,

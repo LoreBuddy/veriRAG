@@ -7,13 +7,13 @@ import time
 
 import pytest
 
-from backend.sandbox import (
+from app.sandbox import (
     SandboxError,
     SandboxErrorCode,
     SandboxExecutionSpec,
     SandboxLimits,
 )
-from backend.sandbox.docker import (
+from app.sandbox.docker import (
     DockerCommandResult,
     DockerSandboxAdapter,
     DockerSandboxConfig,

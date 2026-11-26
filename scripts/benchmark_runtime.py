@@ -18,13 +18,13 @@ from unittest.mock import patch
 import httpx
 from fastapi import FastAPI
 
-from backend.api.routes import threads as thread_routes
-from backend.events.bus import PersistentEventBus
-from backend.events.generated.run_event_v1 import RunEventType, RunEventV1
-from backend.events.sse import format_sse_event
-from backend.infra.auth import get_current_user
-from backend.runs.cancellation import CancellationRegistry
-from backend.threads.service import ThreadSummary
+from app.api.routes import threads as thread_routes
+from app.events.bus import PersistentEventBus
+from app.events.generated.run_event_v1 import RunEventType, RunEventV1
+from app.events.sse import format_sse_event
+from app.infra.auth import get_current_user
+from app.runs.cancellation import CancellationRegistry
+from app.threads.service import ThreadSummary
 
 
 ROOT = Path(__file__).resolve().parents[1]

@@ -8,15 +8,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.runs.request_context import RunRequestContext
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import Base, Message, Run, RunEvent, User
-from backend.providers import ProviderCode, ProviderError, ProviderOperation
-from backend.runs.cancellation import CancellationRegistry, RunExecutionManager
-from backend.runs.repository import RunRepository
-from backend.runs.service import RunService
-from backend.runs.state import RunStatus
-from backend.schemas.runs import RunResponse
+from app.runs.request_context import RunRequestContext
+from app.core.errors import AppError, ErrorCode
+from app.db.models import Base, Message, Run, RunEvent, User
+from app.providers import ProviderCode, ProviderError, ProviderOperation
+from app.runs.cancellation import CancellationRegistry, RunExecutionManager
+from app.runs.repository import RunRepository
+from app.runs.service import RunService
+from app.runs.state import RunStatus
+from app.schemas.runs import RunResponse
 from tests.support import static_model_control
 
 

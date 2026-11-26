@@ -3,13 +3,13 @@ from __future__ import annotations
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from backend.rag.evidence import (
+from app.rag.evidence import (
     agent_evidence_character_budget,
     grader_evidence_character_budget,
     grader_max_document_character_budget,
     pack_evidence,
 )
-from backend.tools.knowledge import _render_rag_result
+from app.tools.knowledge import _render_rag_result
 
 
 def _doc(name: str, text: str) -> dict:

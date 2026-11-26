@@ -4,13 +4,13 @@ from datetime import datetime, timezone
 
 import pytest
 
-from backend.runs.request_context import RunRequestContext
-from backend.web_research.citations import (
+from app.runs.request_context import RunRequestContext
+from app.web_research.citations import (
     WebSourceLedger,
     WebSourceLedgerCode,
     WebSourceLedgerError,
 )
-from backend.web_research.contracts import WebEvidence, WebResearchResult
+from app.web_research.contracts import WebEvidence, WebResearchResult
 
 
 NOW = datetime(2026, 8, 30, tzinfo=timezone.utc)

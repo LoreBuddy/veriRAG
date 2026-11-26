@@ -8,8 +8,8 @@ from pathlib import Path
 
 from pypdf import PdfWriter
 
-from backend.core.errors import AppError, ErrorCode
-from backend.security.uploads import (
+from app.core.errors import AppError, ErrorCode
+from app.security.uploads import (
     UploadPolicy,
     sanitize_original_filename,
     store_upload,

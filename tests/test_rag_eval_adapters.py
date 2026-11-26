@@ -9,14 +9,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from backend.evaluation.rag import (
+from app.evaluation.rag import (
     RagEvalCase,
     RagEvalDataset,
     RagEvalObservationBundle,
     RagExpectedBehavior,
     RagProviderErrorStage,
 )
-from backend.evaluation.rag_adapters import (
+from app.evaluation.rag_adapters import (
     LiveRagEvalAdapter,
     PredictionFileAdapter,
     RagEvalExecutionError,
@@ -26,7 +26,7 @@ from backend.evaluation.rag_adapters import (
     profile_fingerprint,
     rag_source_fingerprint,
 )
-from backend.indexing.html_processor import parse_html_file_to_sections
+from app.indexing.html_processor import parse_html_file_to_sections
 
 
 ROOT = Path(__file__).resolve().parents[1]

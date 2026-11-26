@@ -7,9 +7,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from backend.core.errors import AppError, ErrorCode
-from backend.runs.request_context import RunRequestContext
-from backend.providers import ProviderCode, ProviderError, ProviderOperation
+from app.core.errors import AppError, ErrorCode
+from app.runs.request_context import RunRequestContext
+from app.providers import ProviderCode, ProviderError, ProviderOperation
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

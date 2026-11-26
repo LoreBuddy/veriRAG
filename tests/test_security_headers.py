@@ -4,8 +4,8 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.testclient import TestClient
 
-from backend.core.errors import install_exception_handlers
-from backend.security.headers import (
+from app.core.errors import install_exception_handlers
+from app.security.headers import (
     CONTENT_SECURITY_POLICY,
     PERMISSIONS_POLICY,
     SecurityHeadersMiddleware,

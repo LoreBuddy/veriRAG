@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
-from backend.rate_limits.contracts import RateLimitCheck, RateLimitDecision
+from app.rate_limits.contracts import RateLimitCheck, RateLimitDecision
 
 
 class DenyingLimiter:

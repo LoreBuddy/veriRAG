@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from backend.sandbox import (
+from app.sandbox import (
     SandboxError,
     SandboxErrorCode,
     SandboxExecutionRequest,

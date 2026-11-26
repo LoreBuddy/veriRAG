@@ -5,8 +5,8 @@ from unittest.mock import Mock, patch
 
 import backend.api.routes.auth as auth
 import backend.infra.auth as infra_auth
-from backend.auth.access import create_access_token
-from backend.infra.auth import get_current_user, resolve_role
+from app.auth.access import create_access_token
+from app.infra.auth import get_current_user, resolve_role
 from fastapi import HTTPException
 
 

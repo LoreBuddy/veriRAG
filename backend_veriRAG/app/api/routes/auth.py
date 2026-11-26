@@ -6,16 +6,16 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from backend.auth.origin import enforce_trusted_auth_origin
-from backend.auth.service import RefreshTokenRejected, TokenGrant, token_service
-from backend.auth.supabase import (
+from app.auth.origin import enforce_trusted_auth_origin
+from app.auth.service import RefreshTokenRejected, TokenGrant, token_service
+from app.auth.supabase import (
     SupabaseAuthUnavailable,
     SupabaseTokenRejected,
     verify_supabase_access_token,
 )
-from backend.db.models import User
-from backend.infra.auth import get_current_user, get_db
-from backend.schemas import (
+from app.db.models import User
+from app.infra.auth import get_current_user, get_db
+from app.schemas import (
     AuthResponse,
     CurrentUserResponse,
     LogoutResponse,

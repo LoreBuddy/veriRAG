@@ -5,18 +5,18 @@ from dataclasses import dataclass, field
 from fastapi import Depends, FastAPI
 from fastapi.testclient import TestClient
 
-from backend.core.errors import install_exception_handlers
-from backend.rate_limits.adapters import InMemoryRateLimitAdapter
-from backend.rate_limits.auth import (
+from app.core.errors import install_exception_handlers
+from app.rate_limits.adapters import InMemoryRateLimitAdapter
+from app.rate_limits.auth import (
     AuthRateLimiter,
     enforce_auth_username_rate_limit,
 )
-from backend.rate_limits.contracts import (
+from app.rate_limits.contracts import (
     RateLimitCheck,
     RateLimitDecision,
     RateLimitUnavailable,
 )
-from backend.rate_limits.limiter import RateLimiter
+from app.rate_limits.limiter import RateLimiter
 
 
 @dataclass

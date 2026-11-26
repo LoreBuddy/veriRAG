@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from backend.evaluation.rag_adapters import PredictionFileAdapter
+from app.evaluation.rag_adapters import PredictionFileAdapter
 from scripts.evaluate_rag import main
 
 

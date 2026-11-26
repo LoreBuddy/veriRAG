@@ -10,7 +10,7 @@ from collections.abc import Mapping
 
 import pytest
 
-from backend.web_research.http import (
+from app.web_research.http import (
     PinnedWebHttpTransport,
     SafeWebHttpClient,
     WebHttpError,
@@ -20,7 +20,7 @@ from backend.web_research.http import (
     _RequestWatchdog,
     _numeric_socket,
 )
-from backend.web_research.url_policy import (
+from app.web_research.url_policy import (
     WebUrlPolicy,
     WebUrlPolicyCode,
     WebUrlPolicyError,

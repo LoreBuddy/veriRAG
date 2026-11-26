@@ -17,19 +17,19 @@ from starlette.responses import Response
 
 import backend.api.routes.auth as auth_routes
 import backend.infra.auth as infra_auth
-from backend.auth.access import decode_access_token
-from backend.auth.origin import AuthBodyLimitMiddleware, AuthRequestGuardMiddleware
-from backend.auth.service import (
+from app.auth.access import decode_access_token
+from app.auth.origin import AuthBodyLimitMiddleware, AuthRequestGuardMiddleware
+from app.auth.service import (
     AuthTokenService,
     RefreshTokenRejected,
     RefreshTokenRejection,
     TokenGrant,
 )
-from backend.core.errors import install_exception_handlers
-from backend.core.settings import SecuritySettings
-from backend.db.models import RefreshToken, User
-from backend.infra.auth import authenticate_user, get_password_hash, verify_password
-from backend.infra.database import Base
+from app.core.errors import install_exception_handlers
+from app.core.settings import SecuritySettings
+from app.db.models import RefreshToken, User
+from app.infra.auth import authenticate_user, get_password_hash, verify_password
+from app.infra.database import Base
 
 
 LEGACY_PASSWORD_HASHES = (

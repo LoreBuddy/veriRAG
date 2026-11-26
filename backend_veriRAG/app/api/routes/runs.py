@@ -2,23 +2,23 @@ from fastapi import APIRouter, Depends, Header, Query, status
 from fastapi.responses import StreamingResponse
 from starlette.concurrency import run_in_threadpool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import User
-from backend.events.bus import event_bus
-from backend.events.generated.run_event_v1 import RunEventV1
-from backend.events.journal import journal
-from backend.events.sse import format_sse_event, format_sse_heartbeat
-from backend.infra.auth import get_current_user
-from backend.core.settings import get_settings
-from backend.capabilities.control_service import capability_control_service
-from backend.runs.agent_executor import run_agent_executor
-from backend.runs.cancellation import cancellation_registry
-from backend.runs.resume import resume_coordinator
-from backend.runs.service import service
-from backend.runs.state import RunStatus
-from backend.schemas.events import RunEventsResponse
-from backend.schemas.runs import (RunCreateRequest,RunCreateResponse,RunResumeRequest,RunResumeResponse,RunResponse,)
-from backend.threads.contracts import ThreadId
+from app.core.errors import AppError, ErrorCode
+from app.db.models import User
+from app.events.bus import event_bus
+from app.events.generated.run_event_v1 import RunEventV1
+from app.events.journal import journal
+from app.events.sse import format_sse_event, format_sse_heartbeat
+from app.infra.auth import get_current_user
+from app.core.settings import get_settings
+from app.capabilities.control_service import capability_control_service
+from app.runs.agent_executor import run_agent_executor
+from app.runs.cancellation import cancellation_registry
+from app.runs.resume import resume_coordinator
+from app.runs.service import service
+from app.runs.state import RunStatus
+from app.schemas.events import RunEventsResponse
+from app.schemas.runs import (RunCreateRequest,RunCreateResponse,RunResumeRequest,RunResumeResponse,RunResponse,)
+from app.threads.contracts import ThreadId
 
 
 router = APIRouter(prefix="/v1", tags=["runs"])

@@ -1,12 +1,12 @@
 import unittest
 
-from backend.rag.outcomes import (
+from app.rag.outcomes import (
     RetrievalOutcome,
     outcome_for_result,
     partial_evidence_instruction,
     retrieval_user_message,
 )
-from backend.runs.agent_executor import _resume_answer_prompt
+from app.runs.agent_executor import _resume_answer_prompt
 
 
 class RagOutcomePresentationTests(unittest.TestCase):

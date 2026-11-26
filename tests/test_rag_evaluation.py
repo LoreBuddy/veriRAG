@@ -4,7 +4,7 @@ import math
 import pytest
 from pydantic import ValidationError
 
-from backend.evaluation import (
+from app.evaluation import (
     DatasetFingerprintMismatch,
     GateStatus,
     MetricDirection,

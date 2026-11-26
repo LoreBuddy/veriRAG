@@ -6,7 +6,7 @@ import logging
 import httpx
 import pytest
 
-from backend.providers.gemini_embeddings import GeminiEmbeddingModel
+from app.providers.gemini_embeddings import GeminiEmbeddingModel
 
 
 def test_gemini_embedding_requests_and_validates_1024_dimensions():

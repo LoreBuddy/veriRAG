@@ -8,28 +8,28 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.agent.runtime import (
+from app.agent.runtime import (
     AgentRuntimeEvent,
     AgentRuntimeResult,
 )
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import Base, Message, Run, ToolAudit, User
-from backend.events.bus import PersistentEventBus
-from backend.events.journal import RunEventJournal
-from backend.providers import ProviderCode, ProviderError, ProviderOperation
-from backend.rag.checkpoint_runner import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import Base, Message, Run, ToolAudit, User
+from app.events.bus import PersistentEventBus
+from app.events.journal import RunEventJournal
+from app.providers import ProviderCode, ProviderError, ProviderOperation
+from app.rag.checkpoint_runner import (
     CheckpointedRagRunner,
     HitlCheckpointRepository,
 )
-from backend.runs.agent_executor import RunAgentExecutor, _MessageDeltaBatcher
-from backend.runs.cancellation import CancellationRegistry, RunExecutionManager
-from backend.runs.repository import RunRepository
-from backend.runs.resume import RunResumeCoordinator
-from backend.runs.service import RunService
+from app.runs.agent_executor import RunAgentExecutor, _MessageDeltaBatcher
+from app.runs.cancellation import CancellationRegistry, RunExecutionManager
+from app.runs.repository import RunRepository
+from app.runs.resume import RunResumeCoordinator
+from app.runs.service import RunService
 from tests.support import static_model_control
-from backend.runs.state import MultitaskStrategy
-from backend.skills import ActivatedSkill, SkillPin
-from backend.guardrails import RunToolApprovalGrant
+from app.runs.state import MultitaskStrategy
+from app.skills import ActivatedSkill, SkillPin
+from app.guardrails import RunToolApprovalGrant
 from test_native_checkpoint_hitl import NativeCheckpointGraphTests
 
 

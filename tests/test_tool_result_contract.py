@@ -11,9 +11,9 @@ from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
 from pydantic import ValidationError
 
-from backend.tools.catalog import build_default_tool_registry
-from backend.tools.contracts import new_tool_failure, new_tool_success
-from backend.tools.generated import (
+from app.tools.catalog import build_default_tool_registry
+from app.tools.contracts import new_tool_failure, new_tool_success
+from app.tools.generated import (
     TOOL_RESULT_V1_SCHEMA,
     ToolArtifactV1,
     ToolResultV1,

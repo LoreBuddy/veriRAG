@@ -6,14 +6,14 @@ from typing import Any
 import pytest
 from pydantic import SecretStr
 
-from backend.core.settings import SqlAssistantSettings
-from backend.sql_assistant.contracts import (
+from app.core.settings import SqlAssistantSettings
+from app.sql_assistant.contracts import (
     SqlCatalog,
     SqlCatalogColumn,
     SqlCatalogRelation,
 )
-from backend.sql_assistant.policy import SqlPolicyCompiler
-from backend.sql_assistant.postgres import (
+from app.sql_assistant.policy import SqlPolicyCompiler
+from app.sql_assistant.postgres import (
     SqlAssistantError,
     SqlAssistantErrorCode,
     SqlPlanEstimate,
@@ -22,7 +22,7 @@ from backend.sql_assistant.postgres import (
     _RelationRecord,
     _parse_plan,
 )
-from backend.sql_assistant.runtime import SqlAssistantRuntime
+from app.sql_assistant.runtime import SqlAssistantRuntime
 
 
 def _settings(**overrides: Any) -> SqlAssistantSettings:
@@ -437,7 +437,7 @@ def test_incremental_fetch_masks_sensitive_cells_and_detects_truncation() -> Non
 
 
 def test_relation_owner_and_select_privilege_are_fail_closed() -> None:
-    from backend.sql_assistant.postgres import PostgresSqlAssistantAdapter
+    from app.sql_assistant.postgres import PostgresSqlAssistantAdapter
 
     adapter = PostgresSqlAssistantAdapter(settings=_settings())
     owned = _RelationRecord(
@@ -493,7 +493,7 @@ def test_relation_owner_and_select_privilege_are_fail_closed() -> None:
 
 
 def test_only_security_invoker_barrier_views_can_cross_rls_seam() -> None:
-    from backend.sql_assistant.postgres import PostgresSqlAssistantAdapter
+    from app.sql_assistant.postgres import PostgresSqlAssistantAdapter
 
     adapter = PostgresSqlAssistantAdapter(settings=_settings())
     unsafe_view = _RelationRecord(
@@ -538,7 +538,7 @@ def test_catalog_rejects_custom_domain_composite_enum_and_extension_types(
     namespace: str,
     type_kind: str,
 ) -> None:
-    from backend.sql_assistant.postgres import PostgresSqlAssistantAdapter
+    from app.sql_assistant.postgres import PostgresSqlAssistantAdapter
 
     with pytest.raises(SqlAssistantError) as captured:
         PostgresSqlAssistantAdapter._validate_column_type(
@@ -550,7 +550,7 @@ def test_catalog_rejects_custom_domain_composite_enum_and_extension_types(
 
 
 def test_catalog_accepts_only_pg_catalog_base_types() -> None:
-    from backend.sql_assistant.postgres import PostgresSqlAssistantAdapter
+    from app.sql_assistant.postgres import PostgresSqlAssistantAdapter
 
     PostgresSqlAssistantAdapter._validate_column_type(
         namespace="pg_catalog",
@@ -572,7 +572,7 @@ class _RelationCursor:
 
 
 def test_strict_privilege_check_rejects_select_outside_table_allowlist() -> None:
-    from backend.sql_assistant.postgres import PostgresSqlAssistantAdapter
+    from app.sql_assistant.postgres import PostgresSqlAssistantAdapter
 
     adapter = PostgresSqlAssistantAdapter(settings=_settings())
     cursor = _RelationCursor(

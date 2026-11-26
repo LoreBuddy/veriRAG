@@ -7,12 +7,12 @@ import pytest
 from jsonschema.exceptions import SchemaError
 from langchain_core.tools import tool
 
-from backend.tools.contracts import (
+from app.tools.contracts import (
     TOOL_RESULT_V1_SCHEMA,
     ToolResultV1,
     new_tool_failure,
 )
-from backend.tools.registry import (
+from app.tools.registry import (
     ToolAccess,
     ToolDescriptor,
     ToolExposure,

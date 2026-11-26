@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from backend.capabilities.catalog import CapabilityCatalog
-from backend.skills import SkillRegistry
-from backend.tools.registry import ToolDescriptor, ToolExposure, ToolRegistry
+from app.capabilities.catalog import CapabilityCatalog
+from app.skills import SkillRegistry
+from app.tools.registry import ToolDescriptor, ToolExposure, ToolRegistry
 
 
 def _descriptor(

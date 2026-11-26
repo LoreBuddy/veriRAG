@@ -2,8 +2,8 @@ from inspect import signature
 
 from fastapi import FastAPI
 
-from backend.api.router import router
-from backend.documents.catalog import DocumentCatalog
+from app.api.router import router
+from app.documents.catalog import DocumentCatalog
 
 
 def test_application_exposes_only_canonical_interfaces() -> None:

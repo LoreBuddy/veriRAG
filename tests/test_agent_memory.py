@@ -3,8 +3,8 @@ from types import SimpleNamespace
 
 from langchain_core.messages import AIMessage
 
-from backend.agent.memory import PersistentMemoryManager
-from backend.providers import ProviderExecutor, ProviderPolicy
+from app.agent.memory import PersistentMemoryManager
+from app.providers import ProviderExecutor, ProviderPolicy
 
 
 class _Models:

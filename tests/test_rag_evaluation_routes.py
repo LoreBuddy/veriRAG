@@ -8,15 +8,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.api.routes.evaluations import (
+from app.api.routes.evaluations import (
     get_rag_evaluation_service,
     router,
 )
-from backend.core.errors import install_exception_handlers
-from backend.db.models import Base, User
-from backend.evaluation.repository import RagEvaluationRepository
-from backend.evaluation.service import RagEvaluationService
-from backend.infra.auth import get_current_user
+from app.core.errors import install_exception_handlers
+from app.db.models import Base, User
+from app.evaluation.repository import RagEvaluationRepository
+from app.evaluation.service import RagEvaluationService
+from app.infra.auth import get_current_user
 from tests.support import static_model_control
 
 

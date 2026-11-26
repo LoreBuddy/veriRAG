@@ -1,17 +1,17 @@
 from pathlib import Path
 
-from backend.core.settings import get_settings
-from backend.documents import DocumentCatalog
-from backend.documents.publication import (
+from app.core.settings import get_settings
+from app.documents import DocumentCatalog
+from app.documents.publication import (
     DocumentPublication,
     DocumentRetirementOutcome,
 )
-from backend.documents.retrieval import DocumentRetrievalScope
-from backend.indexing.document_loader import DocumentLoader
-from backend.indexing.embedding import embedding_service
-from backend.indexing.milvus_client import get_milvus_store
-from backend.indexing.milvus_writer import MilvusWriter
-from backend.indexing.parent_chunk_store import ParentChunkStore
+from app.documents.retrieval import DocumentRetrievalScope
+from app.indexing.document_loader import DocumentLoader
+from app.indexing.embedding import embedding_service
+from app.indexing.milvus_client import get_milvus_store
+from app.indexing.milvus_writer import MilvusWriter
+from app.indexing.parent_chunk_store import ParentChunkStore
 
 
 UPLOAD_DIR = get_settings().storage.upload_dir

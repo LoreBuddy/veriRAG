@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, status
 from starlette.concurrency import run_in_threadpool
 
-from backend.capabilities.catalog import CapabilityCatalog
-from backend.capabilities.control_service import (
+from app.capabilities.catalog import CapabilityCatalog
+from app.capabilities.control_service import (
     CapabilityControlService,
     capability_control_service,
 )
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import User
-from backend.infra.auth import get_current_user
-from backend.schemas.capabilities import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import User
+from app.infra.auth import get_current_user
+from app.schemas.capabilities import (
     CapabilityControlPlaneResponse,
     CapabilityDeleteResponse,
     CapabilityResponse,

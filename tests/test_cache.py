@@ -1,6 +1,6 @@
 import unittest
 
-from backend.infra.cache import RedisCache
+from app.infra.cache import RedisCache
 
 
 class RedisCacheTests(unittest.TestCase):

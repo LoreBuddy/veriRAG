@@ -5,11 +5,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import Base, Message, Run, RunEvent, ToolAudit, User, utcnow
-from backend.runs.repository import RunRepository
-from backend.runs.service import RunService
-from backend.runs.state import MultitaskStrategy, RunStatus, can_transition
+from app.core.errors import AppError, ErrorCode
+from app.db.models import Base, Message, Run, RunEvent, ToolAudit, User, utcnow
+from app.runs.repository import RunRepository
+from app.runs.service import RunService
+from app.runs.state import MultitaskStrategy, RunStatus, can_transition
 from tests.support import TEST_MODEL_SNAPSHOT, static_model_control
 
 

@@ -6,9 +6,9 @@ import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from backend.core.settings import get_settings
-from backend.providers.loop_bridge import ProviderLoopBridge
-from backend.providers.runtime import ProviderRuntime
+from app.core.settings import get_settings
+from app.providers.loop_bridge import ProviderLoopBridge
+from app.providers.runtime import ProviderRuntime
 
 
 class _CapabilityRuntime:

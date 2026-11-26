@@ -3,19 +3,19 @@ from types import SimpleNamespace
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from backend.api.routes.capabilities import (
+from app.api.routes.capabilities import (
     get_capability_catalog,
     get_capability_control_service,
     router,
 )
-from backend.capabilities.catalog import (
+from app.capabilities.catalog import (
     CapabilitySkill,
     CapabilitySnapshot,
     CapabilityTool,
 )
-from backend.core.errors import install_exception_handlers
-from backend.infra.auth import get_current_user
-from backend.schemas.capabilities import CapabilityResponse
+from app.core.errors import install_exception_handlers
+from app.infra.auth import get_current_user
+from app.schemas.capabilities import CapabilityResponse
 
 
 class _Catalog:

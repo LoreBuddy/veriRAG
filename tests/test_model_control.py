@@ -8,10 +8,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.core.settings import ModelSettings
-from backend.db.models import Base, User
-from backend.model_control import (
+from app.core.errors import AppError, ErrorCode
+from app.core.settings import ModelSettings
+from app.db.models import Base, User
+from app.model_control import (
     ModelControlRepository,
     ModelControlService,
     ModelRole,

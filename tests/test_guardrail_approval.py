@@ -6,14 +6,14 @@ import pytest
 from langchain.agents.middleware import ToolCallRequest
 from langchain_core.messages import ToolMessage
 
-from backend.agent.factory import AgentRuntimeFactory
-from backend.agent.middleware import ToolPolicyMiddleware
-from backend.runs.request_context import RunRequestContext
-from backend.core.errors import AppError, ErrorCode
-from backend.core.settings import AgentSettings, RunSettings, SandboxSettings
-from backend.guardrails import RunToolApprovalGrant
-from backend.skills import SkillRegistry
-from backend.tools.catalog import build_default_tool_registry
+from app.agent.factory import AgentRuntimeFactory
+from app.agent.middleware import ToolPolicyMiddleware
+from app.runs.request_context import RunRequestContext
+from app.core.errors import AppError, ErrorCode
+from app.core.settings import AgentSettings, RunSettings, SandboxSettings
+from app.guardrails import RunToolApprovalGrant
+from app.skills import SkillRegistry
+from app.tools.catalog import build_default_tool_registry
 
 
 _IMAGE = "sha256:" + ("a" * 64)

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from backend.events import RunEventType, RunEventV1, new_run_event
+from app.events import RunEventType, RunEventV1, new_run_event
 
 
 ROOT = Path(__file__).resolve().parents[1]

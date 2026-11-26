@@ -9,12 +9,12 @@ import time
 from collections.abc import Sequence
 from importlib import metadata
 
-from backend.providers.embedding import (
+from app.providers.embedding import (
     EmbeddingRuntime,
     EmbeddingScope,
     EmbeddingService,
 )
-from backend.providers.loop_bridge import ProviderLoopBridge
+from app.providers.loop_bridge import ProviderLoopBridge
 
 
 def _require_offline_mode() -> None:

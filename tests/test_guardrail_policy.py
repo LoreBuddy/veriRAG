@@ -6,7 +6,7 @@ from dataclasses import replace
 
 import pytest
 
-from backend.guardrails import (
+from app.guardrails import (
     DEFAULT_GUARDRAIL_POLICY,
     GuardrailDecision,
     GuardrailDirective,

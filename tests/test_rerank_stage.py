@@ -6,19 +6,19 @@ from collections.abc import Callable, Sequence
 
 import pytest
 
-from backend.providers.core import (
+from app.providers.core import (
     ProviderCallContext,
     ProviderCode,
     ProviderError,
     ProviderOperation,
 )
-from backend.providers.loop_bridge import ProviderLoopBridge
-from backend.providers.rerank import (
+from app.providers.loop_bridge import ProviderLoopBridge
+from app.providers.rerank import (
     DisabledRerankerAdapter,
     RerankItem,
     RerankResult,
 )
-from backend.rag.reranking import RerankStage
+from app.rag.reranking import RerankStage
 
 
 class _FakeReranker:

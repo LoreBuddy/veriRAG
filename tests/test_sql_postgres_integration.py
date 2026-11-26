@@ -9,9 +9,9 @@ from psycopg import sql as pg_sql
 from psycopg.conninfo import conninfo_to_dict, make_conninfo
 from pydantic import SecretStr
 
-from backend.core.settings import SqlAssistantSettings
-from backend.sql_assistant.postgres import SqlAssistantError
-from backend.sql_assistant.runtime import SqlAssistantRuntime
+from app.core.settings import SqlAssistantSettings
+from app.sql_assistant.postgres import SqlAssistantError
+from app.sql_assistant.runtime import SqlAssistantRuntime
 
 
 TEST_DSN = os.getenv("TEST_SQL_ASSISTANT_DSN", "").strip()

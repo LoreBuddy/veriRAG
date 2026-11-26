@@ -11,12 +11,12 @@ from uuid import uuid4
 
 import pymilvus
 
-from backend.env import load_env
+from app.env import load_env
 
 load_env()
 
-from backend.indexing.milvus_client import MilvusStore
-from backend.security.milvus_filters import and_filter, eq_filter, version_scope_filter
+from app.indexing.milvus_client import MilvusStore
+from app.security.milvus_filters import and_filter, eq_filter, version_scope_filter
 
 
 def _row(

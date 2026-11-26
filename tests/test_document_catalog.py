@@ -6,8 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import (
     Base,
     Document,
     DocumentCleanupJob,
@@ -17,7 +17,7 @@ from backend.db.models import (
     KnowledgeBase,
     User,
 )
-from backend.documents.catalog import (
+from app.documents.catalog import (
     BuildProfile,
     CleanupJobStatus,
     DocumentCatalog,

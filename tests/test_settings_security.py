@@ -2,7 +2,7 @@ import unittest
 
 from pydantic import SecretStr, ValidationError
 
-from backend.core.settings import (
+from app.core.settings import (
     AgentSettings,
     AppSettings,
     ApplicationSettings,

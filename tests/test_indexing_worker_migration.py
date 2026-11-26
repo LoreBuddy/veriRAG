@@ -7,13 +7,13 @@ import sqlalchemy as sa
 from alembic import command
 from sqlalchemy import create_engine, inspect, text
 
-from backend.db.models import (
+from app.db.models import (
     DocumentCleanupJob,
     DocumentRetirementJob,
     IndexJob,
     WorkerHeartbeat,
 )
-from backend.infra.database import alembic_config
+from app.infra.database import alembic_config
 
 
 class IndexingWorkerMigrationTests(unittest.TestCase):

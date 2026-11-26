@@ -55,7 +55,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from backend.threads.contracts import ThreadId
+from app.threads.contracts import ThreadId
 
 
 class RunEventType(StrEnum):

@@ -6,7 +6,7 @@ import pytest
 import sqlglot
 from sqlglot import exp
 
-from backend.sql_assistant import (
+from app.sql_assistant import (
     SqlCatalog,
     SqlCatalogColumn,
     SqlCatalogRelation,

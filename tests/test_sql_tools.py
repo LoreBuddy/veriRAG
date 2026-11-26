@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from backend.runs.request_context import RunRequestContext
-from backend.core.settings import SqlAssistantSettings
-from backend.sql_assistant.postgres import SqlAssistantError, SqlAssistantErrorCode
-from backend.tools.catalog import (
+from app.runs.request_context import RunRequestContext
+from app.core.settings import SqlAssistantSettings
+from app.sql_assistant.postgres import SqlAssistantError, SqlAssistantErrorCode
+from app.tools.catalog import (
     build_default_tool_registry,
     configured_secret_names,
 )
-from backend.tools.contracts import TOOL_RESULT_V1_SCHEMA, ToolResultV1
-from backend.tools.registry import ToolAccess, ToolExposure
+from app.tools.contracts import TOOL_RESULT_V1_SCHEMA, ToolResultV1
+from app.tools.registry import ToolAccess, ToolExposure
 
 
 def _settings(*, enabled: bool = True, dsn: str = "postgresql://reader:x@db/a"):

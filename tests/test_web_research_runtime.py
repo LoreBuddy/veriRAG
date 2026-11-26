@@ -7,9 +7,9 @@ from datetime import datetime, timezone
 import httpx
 import pytest
 
-from backend.core.settings import WebResearchSettings
-from backend.web_research.contracts import WebResearchLimits
-from backend.web_research.runtime import (
+from app.core.settings import WebResearchSettings
+from app.web_research.contracts import WebResearchLimits
+from app.web_research.runtime import (
     TavilyKeylessProvider,
     WebExtractResult,
     WebResearchError,

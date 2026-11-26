@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from backend.sandbox import (
+from app.sandbox import (
     SandboxError,
     SandboxExecutionRequest,
     SandboxExecutionResult,

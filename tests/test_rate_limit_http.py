@@ -6,12 +6,12 @@ from collections.abc import Awaitable
 
 from starlette.types import Message, Receive, Scope, Send
 
-from backend.rate_limits.contracts import (
+from app.rate_limits.contracts import (
     RateLimitDecision,
     RateLimitUnavailable,
 )
-from backend.rate_limits.contracts import RateLimitCheck
-from backend.rate_limits.http import RateLimitMiddleware
+from app.rate_limits.contracts import RateLimitCheck
+from app.rate_limits.http import RateLimitMiddleware
 
 
 def _decision(

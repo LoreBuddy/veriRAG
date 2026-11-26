@@ -1,16 +1,16 @@
 from types import SimpleNamespace
 
-from backend.core.settings import SandboxSettings
-from backend.sandbox import (
+from app.core.settings import SandboxSettings
+from app.sandbox import (
     SandboxExecutionResult,
     SandboxRuntime,
     clear_sandbox_runtime,
     install_sandbox_runtime,
 )
-from backend.tools.catalog import build_default_tool_registry, configured_secret_names
-from backend.tools.contracts import ToolResultV1
-from backend.tools.registry import ToolAccess, ToolExposure
-from backend.tools.sandbox import make_sandbox_execute
+from app.tools.catalog import build_default_tool_registry, configured_secret_names
+from app.tools.contracts import ToolResultV1
+from app.tools.registry import ToolAccess, ToolExposure
+from app.tools.sandbox import make_sandbox_execute
 
 
 _IMAGE = "sha256:" + ("d" * 64)

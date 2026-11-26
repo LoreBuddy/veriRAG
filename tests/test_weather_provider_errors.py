@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 import backend.tools.weather as weather
-from backend.providers import ProviderExecutor
+from app.providers import ProviderExecutor
 
 
 class WeatherProviderErrorTests(unittest.TestCase):

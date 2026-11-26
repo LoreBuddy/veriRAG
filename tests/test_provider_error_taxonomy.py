@@ -6,8 +6,8 @@ from email.utils import format_datetime
 import httpx
 import openai
 
-from backend.core.errors import AppError, ErrorCode, error_payload
-from backend.providers import (
+from app.core.errors import AppError, ErrorCode, error_payload
+from app.providers import (
     ProviderCallContext,
     ProviderCode,
     ProviderError,

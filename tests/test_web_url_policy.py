@@ -8,7 +8,7 @@ from collections.abc import Iterable
 
 import pytest
 
-from backend.web_research.url_policy import (
+from app.web_research.url_policy import (
     DnsPinSnapshot,
     SystemWebDnsResolver,
     WebUrlPolicy,

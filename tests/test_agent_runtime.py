@@ -23,9 +23,9 @@ from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from pydantic import Field
 
-from backend.agent.context import AgentRuntimeContext, RuntimeBudget
-from backend.agent.factory import AgentRuntimeFactory
-from backend.agent.middleware import (
+from app.agent.context import AgentRuntimeContext, RuntimeBudget
+from app.agent.factory import AgentRuntimeFactory
+from app.agent.middleware import (
     DEFAULT_MIDDLEWARE_ORDER,
     ContextBudgetMiddleware,
     DynamicContextMiddleware,
@@ -39,24 +39,24 @@ from backend.agent.middleware import (
     estimate_request_tokens,
     trim_messages_to_budget,
 )
-from backend.agent.models import ModelRegistry, ModelRole
-from backend.agent.runtime import AgentRuntime, AgentRuntimeInput
-from backend.runs.request_context import RunRequestContext
-from backend.core.errors import AppError, ErrorCode
-from backend.core.settings import AgentSettings, ModelSettings, RunSettings
-from backend.guardrails import DEFAULT_GUARDRAIL_POLICY, ToolGuardrail
-from backend.model_control import (
+from app.agent.models import ModelRegistry, ModelRole
+from app.agent.runtime import AgentRuntime, AgentRuntimeInput
+from app.runs.request_context import RunRequestContext
+from app.core.errors import AppError, ErrorCode
+from app.core.settings import AgentSettings, ModelSettings, RunSettings
+from app.guardrails import DEFAULT_GUARDRAIL_POLICY, ToolGuardrail
+from app.model_control import (
     ModelRuntimeSpec,
     build_model_catalog_snapshot,
 )
-from backend.providers import (
+from app.providers import (
     ProviderCode,
     ProviderError,
     ProviderExecutor,
     ProviderPolicy,
 )
-from backend.tools.contracts import new_tool_failure, new_tool_success
-from backend.web_research.contracts import WebEvidence, WebResearchResult
+from app.tools.contracts import new_tool_failure, new_tool_success
+from app.web_research.contracts import WebEvidence, WebResearchResult
 
 
 def test_tool_audit_key_never_fingerprints_argument_values():

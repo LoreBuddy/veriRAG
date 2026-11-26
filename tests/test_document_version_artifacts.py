@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 
-from backend.indexing.document_loader import (
+from app.indexing.document_loader import (
     DocumentArtifactMetadata,
     DocumentLoader,
 )

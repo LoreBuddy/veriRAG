@@ -9,13 +9,13 @@ import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-from backend.auth.service import (
+from app.auth.service import (
     AuthTokenService,
     RefreshTokenRejected,
     RefreshTokenRejection,
 )
-from backend.core.settings import SecuritySettings
-from backend.db.models import RefreshToken, User
+from app.core.settings import SecuritySettings
+from app.db.models import RefreshToken, User
 
 
 def _postgres_url() -> str:

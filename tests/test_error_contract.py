@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from langchain.agents.middleware.model_call_limit import ModelCallLimitExceededError
 
-from backend.core.errors import (
+from app.core.errors import (
     ErrorCode,
     PublicError,
     deserialize_public_error,
@@ -13,7 +13,7 @@ from backend.core.errors import (
     public_error_from_exception,
     serialize_public_error,
 )
-from backend.providers import ProviderCode, ProviderError, ProviderOperation
+from app.providers import ProviderCode, ProviderError, ProviderOperation
 
 
 class FakeProviderError(Exception):

@@ -6,12 +6,12 @@ from collections.abc import Sequence
 import pytest
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from backend.auth.origin import (
+from app.auth.origin import (
     AUTH_REQUEST_BODY_LIMIT,
     AuthBodyLimitMiddleware,
     AuthRequestGuardMiddleware,
 )
-from backend.core.settings import SecuritySettings
+from app.core.settings import SecuritySettings
 
 
 class RecordingApp:

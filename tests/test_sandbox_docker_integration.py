@@ -6,8 +6,8 @@ import time
 
 import pytest
 
-from backend.sandbox import SandboxExecutionSpec, SandboxLimits
-from backend.sandbox.docker import DockerSandboxAdapter, DockerSandboxConfig
+from app.sandbox import SandboxExecutionSpec, SandboxLimits
+from app.sandbox.docker import DockerSandboxAdapter, DockerSandboxConfig
 
 
 ENABLED = os.getenv("TEST_SANDBOX_DOCKER", "").strip() == "1"

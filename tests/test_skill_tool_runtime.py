@@ -12,16 +12,16 @@ from langchain_core.outputs import ChatGeneration, ChatResult
 from langchain_core.tools import tool
 from pydantic import Field
 
-from backend.agent.factory import AgentRuntimeFactory
-from backend.agent.models import ModelRole
-from backend.agent.runtime import AgentRuntimeInput
-from backend.runs.request_context import RunRequestContext
-from backend.core.settings import AgentSettings, RunSettings
-from backend.core.errors import AppError, ErrorCode
-from backend.skills import SkillAccess, SkillPin, SkillRegistry
-from backend.tools.catalog import build_default_tool_registry
-from backend.tools.contracts import TOOL_RESULT_V1_SCHEMA
-from backend.tools.registry import ToolDescriptor, ToolExposure, ToolRegistry
+from app.agent.factory import AgentRuntimeFactory
+from app.agent.models import ModelRole
+from app.agent.runtime import AgentRuntimeInput
+from app.runs.request_context import RunRequestContext
+from app.core.settings import AgentSettings, RunSettings
+from app.core.errors import AppError, ErrorCode
+from app.skills import SkillAccess, SkillPin, SkillRegistry
+from app.tools.catalog import build_default_tool_registry
+from app.tools.contracts import TOOL_RESULT_V1_SCHEMA
+from app.tools.registry import ToolDescriptor, ToolExposure, ToolRegistry
 
 
 class ScriptedChatModel(BaseChatModel):

@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 import pytest
 
-from backend.web_research.contracts import (
+from app.web_research.contracts import (
     WebEvidence,
     WebResearchContractCode,
     WebResearchContractError,

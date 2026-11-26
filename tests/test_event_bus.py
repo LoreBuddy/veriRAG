@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import (
     Base,
     Message,
     Run,
@@ -13,13 +13,13 @@ from backend.db.models import (
     TransactionOutbox,
     User,
 )
-from backend.events.bus import PersistentEventBus
-from backend.events.journal import RunEventJournal
-from backend.events.outbox import OutboxPublisher
-from backend.events.redis_transport import RedisEventTransport
-from backend.events.sse import format_sse_event
-from backend.runs.repository import RunRepository
-from backend.runs.service import RunService
+from app.events.bus import PersistentEventBus
+from app.events.journal import RunEventJournal
+from app.events.outbox import OutboxPublisher
+from app.events.redis_transport import RedisEventTransport
+from app.events.sse import format_sse_event
+from app.runs.repository import RunRepository
+from app.runs.service import RunService
 from tests.support import static_model_control
 
 

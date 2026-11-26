@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from backend.skills import (
+from app.skills import (
     SkillAccess,
     SkillAccessDeniedError,
     SkillActivationSession,

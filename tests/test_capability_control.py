@@ -7,16 +7,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.capabilities.control_repository import CapabilityControlRepository
-from backend.capabilities.control_service import CapabilityControlService
-from backend.core.errors import AppError, ErrorCode
-from backend.core.settings import StorageSettings, get_settings
-from backend.db.models import Base, User
-from backend.runs.request_context import RunRequestContext
-from backend.skills import SkillAccess
-from backend.tools.contracts import ToolResultV1
-from backend.tools.registry import ToolAccess
-from backend.web_research.contracts import WebResearchResult
+from app.capabilities.control_repository import CapabilityControlRepository
+from app.capabilities.control_service import CapabilityControlService
+from app.core.errors import AppError, ErrorCode
+from app.core.settings import StorageSettings, get_settings
+from app.db.models import Base, User
+from app.runs.request_context import RunRequestContext
+from app.skills import SkillAccess
+from app.tools.contracts import ToolResultV1
+from app.tools.registry import ToolAccess
+from app.web_research.contracts import WebResearchResult
 
 
 @pytest.fixture()

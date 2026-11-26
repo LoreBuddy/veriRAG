@@ -8,15 +8,15 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.threads.repository import MessageAppend, ThreadRepository
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import Base, Thread, Run, User
-from backend.runs.repository import RunRepository
-from backend.runs.service import RunService
+from app.threads.repository import MessageAppend, ThreadRepository
+from app.core.errors import AppError, ErrorCode
+from app.db.models import Base, Thread, Run, User
+from app.runs.repository import RunRepository
+from app.runs.service import RunService
 from tests.support import static_model_control
-from backend.runs.state import RunStatus
-from backend.threads.contracts import THREAD_ID_PATTERN
-from backend.threads.service import ThreadService
+from app.runs.state import RunStatus
+from app.threads.contracts import THREAD_ID_PATTERN
+from app.threads.service import ThreadService
 
 
 @pytest.fixture()

@@ -11,17 +11,17 @@ from uuid import uuid4
 import redis.asyncio as redis_async
 from redis.exceptions import AuthenticationError
 
-from backend.events.generated.run_event_v1 import RunEventType, RunEventV1
-from backend.events.redis_transport import RedisEventTransport
-from backend.rate_limits.adapters import RedisRateLimitAdapter
-from backend.rate_limits.contracts import (
+from app.events.generated.run_event_v1 import RunEventType, RunEventV1
+from app.events.redis_transport import RedisEventTransport
+from app.rate_limits.adapters import RedisRateLimitAdapter
+from app.rate_limits.contracts import (
     RateLimitCheck,
     RateLimitPolicy,
     RateLimitUnavailable,
 )
-from backend.rate_limits.limiter import RateLimiter
-from backend.rate_limits.policy import RoutePolicyMatcher
-from backend.runs.cancellation import RedisCancellationTransport
+from app.rate_limits.limiter import RateLimiter
+from app.rate_limits.policy import RoutePolicyMatcher
+from app.runs.cancellation import RedisCancellationTransport
 
 
 async def _wait_for_subscriber(

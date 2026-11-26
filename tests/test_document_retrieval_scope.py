@@ -5,8 +5,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from backend.documents.catalog import DocumentVersionStatus
-from backend.documents.retrieval import DocumentRetrievalScope
+from app.documents.catalog import DocumentVersionStatus
+from app.documents.retrieval import DocumentRetrievalScope
 
 
 def _version(

@@ -3,10 +3,10 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query, status
 from starlette.concurrency import run_in_threadpool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import User
-from backend.infra.auth import get_current_user
-from backend.schemas.threads import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import User
+from app.infra.auth import get_current_user
+from app.schemas.threads import (
     ThreadCreateRequest,
     ThreadDeleteResponse,
     ThreadInfo,
@@ -14,8 +14,8 @@ from backend.schemas.threads import (
     ThreadMessagesResponse,
     ThreadResponse,
 )
-from backend.threads.contracts import ThreadId
-from backend.threads.service import thread_service
+from app.threads.contracts import ThreadId
+from app.threads.service import thread_service
 
 
 router = APIRouter(prefix="/v1", tags=["threads"])

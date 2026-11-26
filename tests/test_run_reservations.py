@@ -4,10 +4,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import Base, Message, Thread, Run, User
-from backend.runs.repository import RunRepository, hash_run_request
-from backend.runs.state import MultitaskStrategy, RunStatus
+from app.core.errors import AppError, ErrorCode
+from app.db.models import Base, Message, Thread, Run, User
+from app.runs.repository import RunRepository, hash_run_request
+from app.runs.state import MultitaskStrategy, RunStatus
 
 
 class RunReservationTests(unittest.TestCase):

@@ -6,7 +6,7 @@ from unittest.mock import patch
 from langchain_core.messages import AIMessage
 
 import backend.evaluation.runtime as runtime_module
-from backend.evaluation import (
+from app.evaluation import (
     RagEvalCase,
     RagExpectedBehavior,
     RagGoldDocument,
@@ -14,8 +14,8 @@ from backend.evaluation import (
     RagProviderErrorStage,
     RagRoute,
 )
-from backend.evaluation.runtime import RagEvaluationRuntime
-from backend.providers import (
+from app.evaluation.runtime import RagEvaluationRuntime
+from app.providers import (
     ProviderCode,
     ProviderError,
     ProviderExecutor,

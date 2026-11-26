@@ -6,10 +6,10 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 import backend.api.routes.runs as routes
-from backend.core.errors import install_exception_handlers
-from backend.events.contracts import new_run_event
-from backend.infra.auth import get_current_user
-from backend.runs.repository import RunRecord, RunReservation
+from app.core.errors import install_exception_handlers
+from app.events.contracts import new_run_event
+from app.infra.auth import get_current_user
+from app.runs.repository import RunRecord, RunReservation
 
 
 def _run_record(
@@ -267,9 +267,9 @@ def test_canonical_run_route_does_not_implicitly_create_thread() -> None:
     from sqlalchemy.orm import sessionmaker
     from sqlalchemy.pool import StaticPool
 
-    from backend.db.models import Base, Thread, User
-    from backend.runs.repository import RunRepository
-    from backend.runs.service import RunService
+    from app.db.models import Base, Thread, User
+    from app.runs.repository import RunRepository
+    from app.runs.service import RunService
 
     engine = create_engine(
         "sqlite://",

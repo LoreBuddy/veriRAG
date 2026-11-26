@@ -8,10 +8,10 @@ from fastapi.testclient import TestClient
 
 import backend.api.routes.runs as run_routes
 import backend.api.routes.threads as thread_routes
-from backend.api.router import router as application_router
-from backend.core.errors import AppError, ErrorCode, install_exception_handlers
-from backend.infra.auth import get_current_user
-from backend.threads.service import ThreadMessage, ThreadMessagePage, ThreadSummary
+from app.api.router import router as application_router
+from app.core.errors import AppError, ErrorCode, install_exception_handlers
+from app.infra.auth import get_current_user
+from app.threads.service import ThreadMessage, ThreadMessagePage, ThreadSummary
 
 
 NOW = datetime(2026, 7, 16, 8, 0, tzinfo=UTC)

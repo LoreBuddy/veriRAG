@@ -3,9 +3,9 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from types import SimpleNamespace
 
-from backend.capabilities.control_contracts import ManagedHttpToolRecord
-from backend.tools.custom_http import CustomHttpToolRuntime
-from backend.web_research.url_policy import WebUrlPolicyCode, WebUrlPolicyError
+from app.capabilities.control_contracts import ManagedHttpToolRecord
+from app.tools.custom_http import CustomHttpToolRuntime
+from app.web_research.url_policy import WebUrlPolicyCode, WebUrlPolicyError
 
 
 def _profile(**overrides) -> ManagedHttpToolRecord:

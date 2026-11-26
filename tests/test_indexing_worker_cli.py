@@ -9,7 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from backend.documents.worker import IndexingWorker, IndexingWorkerConfig
+from app.documents.worker import IndexingWorker, IndexingWorkerConfig
 import backend.workers.indexing as indexing_cli
 
 

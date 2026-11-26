@@ -8,8 +8,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.db.models import Base, User, utcnow
-from backend.evaluation import (
+from app.db.models import Base, User, utcnow
+from app.evaluation import (
     RagEvalCase,
     RagEvalDataset,
     RagEvalGatePolicy,
@@ -20,14 +20,14 @@ from backend.evaluation import (
     RagProviderErrorStage,
     RagRoute,
 )
-from backend.evaluation.contracts import (
+from app.evaluation.contracts import (
     RagEvaluationCaseStatus,
     RagEvaluationJobStatus,
 )
-from backend.evaluation.repository import RagEvaluationRepository
-from backend.evaluation.runtime import RagEvaluationCaseExecution
-from backend.evaluation.service import RagEvaluationService
-from backend.evaluation.worker import RagEvaluationWorker
+from app.evaluation.repository import RagEvaluationRepository
+from app.evaluation.runtime import RagEvaluationCaseExecution
+from app.evaluation.service import RagEvaluationService
+from app.evaluation.worker import RagEvaluationWorker
 from tests.support import TEST_MODEL_SNAPSHOT, static_model_control
 
 
@@ -167,7 +167,7 @@ def test_dataset_job_case_and_report_are_persisted_behind_one_interface():
             retrieved_identities=[],
             duration_ms=12,
         )
-        from backend.evaluation import RagEvalObservationBundle, evaluate_rag
+        from app.evaluation import RagEvalObservationBundle, evaluate_rag
 
         report = evaluate_rag(
             first.dataset,

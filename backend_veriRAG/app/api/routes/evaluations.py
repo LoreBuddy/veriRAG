@@ -3,20 +3,20 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, Query, status
 from starlette.concurrency import run_in_threadpool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import User
-from backend.evaluation.contracts import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import User
+from app.evaluation.contracts import (
     RagEvaluationCaseRecord,
     RagEvaluationDatasetRecord,
     RagEvaluationJobRecord,
     RagEvaluationJobStatus,
 )
-from backend.evaluation.service import (
+from app.evaluation.service import (
     RagEvaluationService,
     rag_evaluation_service,
 )
-from backend.infra.auth import get_current_user
-from backend.schemas.evaluations import (
+from app.infra.auth import get_current_user
+from app.schemas.evaluations import (
     EvaluationModelSummary,
     RagEvaluationCaseResponse,
     RagEvaluationCasesResponse,

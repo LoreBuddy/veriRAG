@@ -2,7 +2,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from backend.schemas.rag import HitlResumeState, RagTrace, normalize_rag_trace
+from app.schemas.rag import HitlResumeState, RagTrace, normalize_rag_trace
 
 
 class RagTraceSchemaTests(unittest.TestCase):

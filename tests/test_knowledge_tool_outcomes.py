@@ -1,7 +1,7 @@
 import unittest
 
-from backend.runs.request_context import RunRequestContext
-from backend.tools.knowledge import _render_rag_result
+from app.runs.request_context import RunRequestContext
+from app.tools.knowledge import _render_rag_result
 
 
 class KnowledgeToolOutcomeTests(unittest.TestCase):

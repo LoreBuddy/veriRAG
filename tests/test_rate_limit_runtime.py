@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import pytest
 from pydantic import SecretStr
 
-from backend.rate_limits.runtime import build_rate_limiter
+from app.rate_limits.runtime import build_rate_limiter
 
 
 def _settings(

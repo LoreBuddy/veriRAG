@@ -2,7 +2,7 @@ import unittest
 
 from fastapi import FastAPI
 
-from backend.api.routes.runs import router
+from app.api.routes.runs import router
 
 
 class RunSchemaContractTests(unittest.TestCase):

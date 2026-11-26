@@ -3,11 +3,11 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, status
 from starlette.concurrency import run_in_threadpool
 
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import User
-from backend.infra.auth import get_current_user
-from backend.model_control import ModelControlService, ModelRole, model_control_service
-from backend.schemas.models import (
+from app.core.errors import AppError, ErrorCode
+from app.db.models import User
+from app.infra.auth import get_current_user
+from app.model_control import ModelControlService, ModelRole, model_control_service
+from app.schemas.models import (
     ModelAssignmentRequest,
     ModelControlPlaneResponse,
     ModelDeleteResponse,

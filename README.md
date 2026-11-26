@@ -415,7 +415,7 @@ Supabase 身份交换、Thread Run、HITL resume、上传与 general API 使用�
 
 ### 后端
 
-后端代码位于 `backend/`，统一使用 `from backend.xxx import ...`：
+后端代码位于 `backend/`，统一使用 `from app.xxx import ...`：
 
 - [backend/app.py](backend/app.py)：FastAPI 入口、生命周期、CORS、安全响应头、路由与生产静态资源
   挂载。

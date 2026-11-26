@@ -13,7 +13,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from pydantic import ValidationError  # noqa: E402
 
-from backend.evaluation.rag import (  # noqa: E402
+from app.evaluation.rag import (  # noqa: E402
     DatasetFingerprintMismatch,
     MetricDirection,
     RagEvalGatePolicy,
@@ -27,7 +27,7 @@ from backend.evaluation.rag import (  # noqa: E402
     render_rag_eval_json,
     render_rag_eval_markdown,
 )
-from backend.evaluation.rag_adapters import (  # noqa: E402
+from app.evaluation.rag_adapters import (  # noqa: E402
     LiveRagEvalAdapter,
     PredictionFileAdapter,
     RagEvalExecutionError,
@@ -110,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "validate":
             dataset = load_rag_eval_dataset(args.dataset)
-            from backend.evaluation.rag import dataset_fingerprint
+            from app.evaluation.rag import dataset_fingerprint
 
             print(
                 json.dumps(
@@ -202,7 +202,7 @@ def _metadata(
     source_mismatch_override: bool,
 ) -> dict[str, Any]:
     if live:
-        from backend.env import load_env
+        from app.env import load_env
 
         load_env()
         profile = live_rag_profile_snapshot(

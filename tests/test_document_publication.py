@@ -6,20 +6,20 @@ from types import SimpleNamespace
 
 import pytest
 
-from backend.core.errors import AppError, ErrorCode
-from backend.documents.catalog import (
+from app.core.errors import AppError, ErrorCode
+from app.documents.catalog import (
     BuildProfile,
     IndexJobExecution,
     IndexJobRecord,
     IndexJobStatus,
 )
-from backend.documents.publication import (
+from app.documents.publication import (
     DocumentPublication,
     DocumentPublicationConfig,
     index_job_view,
 )
-from backend.indexing.milvus_writer import IndexVersionScope
-from backend.security.uploads import StoredUpload
+from app.indexing.milvus_writer import IndexVersionScope
+from app.security.uploads import StoredUpload
 
 
 def _chunk(version_id: str, level: int, index: int) -> dict:

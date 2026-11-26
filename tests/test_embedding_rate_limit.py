@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from backend.providers.embedding_rate_limit import RedisEmbeddingRequestPacer
+from app.providers.embedding_rate_limit import RedisEmbeddingRequestPacer
 
 
 class FakeRedisClient:

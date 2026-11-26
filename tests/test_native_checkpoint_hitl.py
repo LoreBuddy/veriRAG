@@ -10,19 +10,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from backend.runs.request_context import RunRequestContext
-from backend.core.errors import AppError, ErrorCode
-from backend.db.models import Base, Message, Run, RunCheckpoint, RunEvent, User
-from backend.rag.checkpoint_runner import (
+from app.runs.request_context import RunRequestContext
+from app.core.errors import AppError, ErrorCode
+from app.db.models import Base, Message, Run, RunCheckpoint, RunEvent, User
+from app.rag.checkpoint_runner import (
     CheckpointedRagRunner,
     HitlCheckpointRepository,
     _assert_checkpoint_tenant,
 )
-from backend.agent.factory import runtime_factory
-from backend.runs.repository import RunRepository
-from backend.runs.resume import RunResumeCoordinator
-from backend.runs.service import RunService
-from backend.runs.state import RunStatus
+from app.agent.factory import runtime_factory
+from app.runs.repository import RunRepository
+from app.runs.resume import RunResumeCoordinator
+from app.runs.service import RunService
+from app.runs.state import RunStatus
 from tests.support import static_model_control
 from test_rag_short_circuit import FakeStructuredModel, _doc, _meta, load_pipeline
 
@@ -713,8 +713,8 @@ class NativeCheckpointRepositoryTests(unittest.TestCase):
 
 class ResumeRouteContractTests(unittest.TestCase):
     def test_resume_route_uses_versioned_run_contract(self):
-        from backend.api.routes.runs import router
-        from backend.schemas.runs import RunResumeResponse
+        from app.api.routes.runs import router
+        from app.schemas.runs import RunResumeResponse
 
         route = next(
             item for item in router.routes if item.path == "/v1/runs/{run_id}/resume"

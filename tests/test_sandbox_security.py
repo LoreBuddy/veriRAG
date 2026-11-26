@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from backend.sandbox import SandboxError, SandboxErrorCode
-from backend.sandbox.docker import SubprocessDockerCommandRunner
+from app.sandbox import SandboxError, SandboxErrorCode
+from app.sandbox.docker import SubprocessDockerCommandRunner
 
 
 RUNNER_PATH = Path(__file__).parents[1] / "docker" / "sandbox" / "runner.py"
