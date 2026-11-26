@@ -17,6 +17,7 @@ dependencies = [
     "pyjwt>=2.15.1",
     "redis>=8.2.0",
     "sqlalchemy[asyncio]>=2.1.9",
+    "sqlglot>=30.35.0",
 ]
 
 [tool.ruff]
