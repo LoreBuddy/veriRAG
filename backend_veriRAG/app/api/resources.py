@@ -13,7 +13,6 @@ from app.indexing.milvus_client import get_milvus_store
 from app.indexing.milvus_writer import MilvusWriter
 from app.indexing.parent_chunk_store import ParentChunkStore
 
-
 UPLOAD_DIR = get_settings().storage.upload_dir
 
 loader = DocumentLoader()

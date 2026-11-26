@@ -21,7 +21,6 @@ from app.schemas.capabilities import (
     WebResearchConfigUpdateRequest,
 )
 
-
 router = APIRouter(prefix="/v1", tags=["capabilities"])
 
 
