@@ -1,1 +1,0 @@
-"""SuperMew backend package."""

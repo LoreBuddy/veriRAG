@@ -1,9 +1,9 @@
 {
     "files.exclude": {
         "**/__pycache__": true,
-	"**/__*__": true,
-	".gitignore": true,
-        ".venv": true,
+		"**/__*__": true,
+		"**/.gitignore": true,
+        "**/.venv": true,
         "v12": true,
         ".vscode": true,
         "node_modules": true,
