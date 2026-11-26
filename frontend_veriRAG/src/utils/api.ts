@@ -1,5 +1,6 @@
 import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 import { expireAuthSession, getAuthSession, refreshAuthSession } from '@/auth/session';
+import { apiBaseUrl } from './apiBaseUrl';
 import { normalizePublicErrorInfo, type PublicErrorInfo } from '@/types/publicError';
 
 type UnknownRecord = Record<string, unknown>;
@@ -136,6 +137,7 @@ export async function getPublicErrorFromResponse(response: Response): Promise<Pu
 }
 
 const api = axios.create({
+  baseURL: apiBaseUrl,
   timeout: 60000,
   withCredentials: true,
 });

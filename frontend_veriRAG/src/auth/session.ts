@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { apiBaseUrl } from '@/utils/apiBaseUrl';
 
 export interface AuthSession {
   access_token: string;
@@ -19,6 +20,7 @@ interface RefreshAttempt {
 }
 
 const credentialClient = axios.create({
+  baseURL: apiBaseUrl,
   timeout: 60000,
   withCredentials: true,
 });

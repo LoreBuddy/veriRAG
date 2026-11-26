@@ -170,9 +170,15 @@ cp .env.example backend/.env
   `EVALUATION_MODEL`；这些模型值只用于首次创建模型控制面默认值。
 - `JWT_SECRET_KEY`：至少 32 字符的随机值，例如使用 `openssl rand -hex 32` 生成。
 - `SUPABASE_URL` 与 `SUPABASE_PUBLISHABLE_KEY`：从 Supabase 项目 API 设置中获取。前端在
-  `frontend-react/.env.development` 与 `frontend-react/.env.production` 配置对应的
-  `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_PUBLISHABLE_KEY`。Vite 会按开发/生产 mode 自动加载；
-  不要将 Supabase secret key 放入前端。
+  `frontend_veriRAG/.env.development` 与 `frontend_veriRAG/.env.production` 配置对应的
+  `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_PUBLISHABLE_KEY`。`VITE_CORE_API` 指定 FastAPI
+  API origin；留空时使用前端同源。Vite 会按开发/生产 mode 自动加载；不要将 Supabase
+  secret key 放入前端。
+
+前后端使用不同 origin 时，后端 `CORS_ORIGINS` 必须精确包含前端 origin，并启用
+`CORS_ALLOW_CREDENTIALS=true`。跨站部署还需设置 `AUTH_REFRESH_COOKIE_SECURE=true` 和
+`AUTH_REFRESH_COOKIE_SAMESITE=none`；浏览器可能限制跨站 Cookie，因此生产环境优先使用同源
+部署或同站点 API 代理。
 
 Supabase Auth 负责邮箱/密码注册与登录；启用邮箱验证时，用户需先确认邮箱。新账号默认是
 普通用户；管理员角色只能在后端受控地授予。应用通过 Supabase 用户 UUID 写入 `users.zid`，
