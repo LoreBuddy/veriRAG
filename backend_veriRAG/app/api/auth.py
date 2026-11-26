@@ -22,8 +22,7 @@ from app.schemas import (
     SupabaseExchangeRequest,
 )
 
-
-router = APIRouter(tags=["auth"])
+authRou = APIRouter(tags=["auth"])
 
 
 def _auth_response(grant: TokenGrant) -> AuthResponse:
@@ -54,7 +53,7 @@ def _reject_refresh(response: Response, exc: RefreshTokenRejected) -> NoReturn:
     ) from exc
 
 
-@router.post("/auth/supabase/exchange", response_model=AuthResponse)
+@authRou.post("/auth/supabase/exchange", response_model=AuthResponse)
 def exchange_supabase_session(
     request: SupabaseExchangeRequest,
     response: Response,
@@ -109,7 +108,7 @@ def exchange_supabase_session(
     return _auth_response(grant)
 
 
-@router.post("/auth/refresh", response_model=AuthResponse)
+@authRou.post("/auth/refresh", response_model=AuthResponse)
 def refresh(
     request: Request,
     response: Response,
@@ -124,7 +123,7 @@ def refresh(
     return _auth_response(grant)
 
 
-@router.post("/auth/logout", response_model=LogoutResponse)
+@authRou.post("/auth/logout", response_model=LogoutResponse)
 def logout(
     request: Request,
     response: Response,
@@ -136,7 +135,7 @@ def logout(
     return LogoutResponse(message="已退出登录", revoked_count=revoked)
 
 
-@router.post("/auth/logout-all", response_model=LogoutResponse)
+@authRou.post("/auth/logout-all", response_model=LogoutResponse)
 def logout_all(
     response: Response,
     _origin_guard: None = Depends(_trusted_auth_origin),
@@ -148,6 +147,6 @@ def logout_all(
     return LogoutResponse(message="已退出所有设备", revoked_count=revoked)
 
 
-@router.get("/auth/me", response_model=CurrentUserResponse)
+@authRou.get("/auth/me", response_model=CurrentUserResponse)
 def me(current_user: User = Depends(get_current_user)) -> CurrentUserResponse:
     return CurrentUserResponse(username=current_user.username, role=current_user.role)
