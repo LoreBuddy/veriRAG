@@ -301,15 +301,15 @@ export default function App() {
                 setMessages((current) =>
                     generation === threadLoadGeneration.current
                         ? current.map((message) =>
-                              message.runId === projection.runId && !message.isUser
-                                  ? {
-                                        ...message,
-                                        runTimeline: projection.timeline,
-                                        runActiveDurationMs: projection.activeDurationMs,
-                                        runActiveStartedAt: projection.activeStartedAt,
-                                    }
-                                  : message
-                          )
+                            message.runId === projection.runId && !message.isUser
+                                ? {
+                                    ...message,
+                                    runTimeline: projection.timeline,
+                                    runActiveDurationMs: projection.activeDurationMs,
+                                    runActiveStartedAt: projection.activeStartedAt,
+                                }
+                                : message
+                        )
                         : current
                 );
             } catch (error: unknown) {
@@ -351,16 +351,16 @@ export default function App() {
         setMessages((current) =>
             isCurrentThread()
                 ? [
-                      ...current,
-                      { id: `u-${Date.now()}`, isUser: true, text },
-                      {
-                          id: pendingAssistantId,
-                          isUser: false,
-                          text: '',
-                          status: 'queued',
-                          isThinking: true,
-                      },
-                  ]
+                    ...current,
+                    { id: `u-${Date.now()}`, isUser: true, text },
+                    {
+                        id: pendingAssistantId,
+                        isUser: false,
+                        text: '',
+                        status: 'queued',
+                        isThinking: true,
+                    },
+                ]
                 : current
         );
         try {
@@ -403,15 +403,15 @@ export default function App() {
             setMessages((current) =>
                 isCurrentThread()
                     ? current.map((message) =>
-                          message.id === pendingAssistantId
-                              ? {
-                                    ...message,
-                                    id: assistantMessageId,
-                                    runId: run.id,
-                                    status: run.status,
-                                }
-                              : message
-                      )
+                        message.id === pendingAssistantId
+                            ? {
+                                ...message,
+                                id: assistantMessageId,
+                                runId: run.id,
+                                status: run.status,
+                            }
+                            : message
+                    )
                     : current
             );
 
@@ -432,26 +432,26 @@ export default function App() {
                     setMessages((current) =>
                         isCurrentThread()
                             ? current.map((message) =>
-                                  message.id === assistantMessageId
-                                      ? {
-                                            ...message,
-                                            text: nextProjection.messageText || message.text,
-                                            status: nextProjection.messageStatus || displayStatus,
-                                            isThinking:
-                                                !nextProjection.terminal &&
-                                                [
-                                                    'creating',
-                                                    'queued',
-                                                    'pending',
-                                                    'running',
-                                                    'cancelling',
-                                                ].includes(displayStatus),
-                                            runTimeline: nextProjection.timeline,
-                                            runActiveDurationMs: nextProjection.activeDurationMs,
-                                            runActiveStartedAt: nextProjection.activeStartedAt,
-                                        }
-                                      : message
-                              )
+                                message.id === assistantMessageId
+                                    ? {
+                                        ...message,
+                                        text: nextProjection.messageText || message.text,
+                                        status: nextProjection.messageStatus || displayStatus,
+                                        isThinking:
+                                            !nextProjection.terminal &&
+                                            [
+                                                'creating',
+                                                'queued',
+                                                'pending',
+                                                'running',
+                                                'cancelling',
+                                            ].includes(displayStatus),
+                                        runTimeline: nextProjection.timeline,
+                                        runActiveDurationMs: nextProjection.activeDurationMs,
+                                        runActiveStartedAt: nextProjection.activeStartedAt,
+                                    }
+                                    : message
+                            )
                             : current
                     );
                     if (nextProjection.messageStatus === 'completed' && !completedMessage) {
@@ -468,16 +468,16 @@ export default function App() {
                             setMessages((current) =>
                                 isCurrentThread()
                                     ? current.map((message) =>
-                                          message.id === assistantMessageId
-                                              ? {
-                                                    ...message,
-                                                    text: persistedMessage.content,
-                                                    status: persistedMessage.status,
-                                                    isThinking: false,
-                                                    ragTrace: persistedMessage.rag_trace,
-                                                }
-                                              : message
-                                      )
+                                        message.id === assistantMessageId
+                                            ? {
+                                                ...message,
+                                                text: persistedMessage.content,
+                                                status: persistedMessage.status,
+                                                isThinking: false,
+                                                ragTrace: persistedMessage.rag_trace,
+                                            }
+                                            : message
+                                    )
                                     : current
                             );
                         }
@@ -514,50 +514,50 @@ export default function App() {
                 setMessages((current) =>
                     isCurrentThread()
                         ? current.map((message) =>
-                              message.id === assistantMessageId
-                                  ? {
-                                        ...message,
-                                        text:
-                                            assistantMessage?.content ||
-                                            projection?.messageText ||
-                                            '运行已完成，但没有返回助手内容。',
-                                        status: assistantMessage?.status || 'completed',
-                                        isThinking: false,
-                                        ragTrace: assistantMessage?.rag_trace || null,
-                                        runTimeline: projection?.timeline || message.runTimeline,
-                                        runActiveDurationMs:
-                                            projection?.activeDurationMs ?? message.runActiveDurationMs,
-                                        runActiveStartedAt:
-                                            projection?.activeStartedAt ?? message.runActiveStartedAt,
-                                    }
-                                  : message
-                          )
+                            message.id === assistantMessageId
+                                ? {
+                                    ...message,
+                                    text:
+                                        assistantMessage?.content ||
+                                        projection?.messageText ||
+                                        '运行已完成，但没有返回助手内容。',
+                                    status: assistantMessage?.status || 'completed',
+                                    isThinking: false,
+                                    ragTrace: assistantMessage?.rag_trace || null,
+                                    runTimeline: projection?.timeline || message.runTimeline,
+                                    runActiveDurationMs:
+                                        projection?.activeDurationMs ?? message.runActiveDurationMs,
+                                    runActiveStartedAt:
+                                        projection?.activeStartedAt ?? message.runActiveStartedAt,
+                                }
+                                : message
+                        )
                         : current
                 );
             } else {
                 setMessages((current) =>
                     isCurrentThread()
                         ? current.map((message) =>
-                              message.id === assistantMessageId
-                                  ? {
-                                        ...message,
-                                        text:
-                                            run.status === 'waiting_input'
-                                                ? projection?.pendingHitl?.prompt ||
-                                                  '运行正在等待补充信息。'
-                                                : run.error?.message ||
-                                                  '运行未完成，请稍后重新连接。',
-                                        status: run.status,
-                                        isThinking: false,
-                                        isHitlRequest: run.status === 'waiting_input',
-                                        runTimeline: projection?.timeline || message.runTimeline,
-                                        runActiveDurationMs:
-                                            projection?.activeDurationMs ?? message.runActiveDurationMs,
-                                        runActiveStartedAt:
-                                            projection?.activeStartedAt ?? message.runActiveStartedAt,
-                                    }
-                                  : message
-                          )
+                            message.id === assistantMessageId
+                                ? {
+                                    ...message,
+                                    text:
+                                        run.status === 'waiting_input'
+                                            ? projection?.pendingHitl?.prompt ||
+                                            '运行正在等待补充信息。'
+                                            : run.error?.message ||
+                                            '运行未完成，请稍后重新连接。',
+                                    status: run.status,
+                                    isThinking: false,
+                                    isHitlRequest: run.status === 'waiting_input',
+                                    runTimeline: projection?.timeline || message.runTimeline,
+                                    runActiveDurationMs:
+                                        projection?.activeDurationMs ?? message.runActiveDurationMs,
+                                    runActiveStartedAt:
+                                        projection?.activeStartedAt ?? message.runActiveStartedAt,
+                                }
+                                : message
+                        )
                         : current
                 );
             }
@@ -566,18 +566,18 @@ export default function App() {
                 setMessages((current) =>
                     isCurrentThread()
                         ? current.map((message) =>
-                              message.id === assistantMessageId
-                                  ? {
-                                        ...message,
-                                        text:
-                                            error instanceof Error
-                                                ? error.message
-                                                : '发送失败，请稍后重试',
-                                        status: 'failed',
-                                        isThinking: false,
-                                    }
-                                  : message
-                          )
+                            message.id === assistantMessageId
+                                ? {
+                                    ...message,
+                                    text:
+                                        error instanceof Error
+                                            ? error.message
+                                            : '发送失败，请稍后重试',
+                                    status: 'failed',
+                                    isThinking: false,
+                                }
+                                : message
+                        )
                         : current
                 );
             }
@@ -1010,10 +1010,10 @@ export default function App() {
                                                         webResearchStatus === 'error'
                                                             ? webResearchError
                                                             : webResearchAvailabilityReason === 'permission_required'
-                                                              ? '当前账号权限不足'
-                                                              : webResearchAvailabilityReason === 'not_configured'
-                                                                ? '请管理员在 Skill / Tool 管理中启用'
-                                                                : undefined
+                                                                ? '当前账号权限不足'
+                                                                : webResearchAvailabilityReason === 'not_configured'
+                                                                    ? '请管理员在 Skill / Tool 管理中启用'
+                                                                    : undefined
                                                     }
                                                     onClick={() => setSelectedMode('web-research')}
                                                 >
@@ -1025,11 +1025,11 @@ export default function App() {
                                                         {webResearchStatus === 'loading'
                                                             ? '正在检查可用性…'
                                                             : webResearchSkill?.available
-                                                              ? '查询公开来源'
-                                                              : webResearchAvailabilityReason ===
-                                                                  'permission_required'
-                                                                ? '当前账号权限不足'
-                                                                : '需管理员启用网络研究'}
+                                                                ? '查询公开来源'
+                                                                : webResearchAvailabilityReason ===
+                                                                    'permission_required'
+                                                                    ? '当前账号权限不足'
+                                                                    : '需管理员启用网络研究'}
                                                     </small>
                                                 </button>
                                                 <button type="button" onClick={() => setNav('chat')}>
@@ -1235,8 +1235,8 @@ export default function App() {
                                 nav === 'capabilities'
                                     ? 'chat-area capability-admin-host'
                                     : nav === 'settings'
-                                      ? 'chat-area knowledge-base-host'
-                                      : 'chat-area'
+                                        ? 'chat-area knowledge-base-host'
+                                        : 'chat-area'
                             }
                             style={{
                                 width: '100%',
