@@ -2,11 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import router
-from app.core.settings import get_settings
 
 
 def create_app() -> FastAPI:
-    settings = get_settings()
+    
     app = FastAPI(
         docs_url="/swagger",
         title="veriRAG",
@@ -16,8 +15,10 @@ def create_app() -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.security.cors_origins,
-        allow_credentials=settings.security.cors_allow_credentials,
+        # allow_origins=settings.ALLOWED_ORIGINS,
+        # allow_credentials=True,
+        allow_origins=["*"],
+        allow_credentials=False,  # MUST be False when origins="*"
         allow_methods=["*"],
         allow_headers=["*"],
     )
