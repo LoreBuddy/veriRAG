@@ -5,6 +5,7 @@ from app.api import router
 from app.core.settings import get_settings
 
 
+
 def create_app() -> FastAPI:
     settings = get_settings()
 
