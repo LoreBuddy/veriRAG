@@ -41,7 +41,7 @@ export default function WelcomeScreen() {
                         <i className="fa-regular fa-message" />
                     </span>
                     <strong>智能对话</strong>
-                    <small>自动选择合适工具</small>
+                    <small>自动选择工具</small>
                 </button>
                 <button type="button">
                     <span>
