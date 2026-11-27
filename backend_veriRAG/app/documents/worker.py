@@ -21,6 +21,7 @@ from app.documents.catalog import (
 from app.documents.publication import DocumentPublication
 
 
+
 logger = logging.getLogger(__name__)
 
 
