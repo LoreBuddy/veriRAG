@@ -2,12 +2,15 @@ from __future__ import annotations
 
 from typing import NoReturn
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.auth.origin import enforce_trusted_auth_origin
 from app.auth.service import RefreshTokenRejected, TokenGrant, token_service
+from app.core.settings import get_settings
 from app.auth.supabase import (
     SupabaseAuthUnavailable,
     SupabaseTokenRejected,
@@ -23,6 +26,72 @@ from app.schemas import (
 )
 
 authRou = APIRouter(tags=["auth"])
+
+
+@authRou.post("/auth/token", include_in_schema=False)
+def swagger_login(form: OAuth2PasswordRequestForm = Depends()) -> dict[str, str]:
+    settings = get_settings()
+    if settings.app.environment != "development":
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+
+    security = settings.security
+    project_url = security.supabase_url.strip().rstrip("/")
+    api_key = (
+        security.supabase_anon_key.get_secret_value().strip()
+        or security.supabase_publishable_key.get_secret_value().strip()
+    )
+    if not project_url or not api_key:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Supabase Auth is not configured",
+        )
+    try:
+        with httpx.Client(timeout=10.0, follow_redirects=False) as client:
+            response = client.post(
+                f"{project_url}/auth/v1/token?grant_type=password",
+                headers={"apikey": api_key},
+                json={"email": form.username, "password": form.password},
+            )
+    except httpx.TimeoutException as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Supabase Auth request timed out",
+        ) from exc
+    except httpx.RequestError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Supabase Auth is unavailable",
+        ) from exc
+    if response.status_code != status.HTTP_200_OK:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    try:
+        payload = response.json()
+        supabase_access_token = payload["access_token"]
+        if not isinstance(supabase_access_token, str) or not supabase_access_token:
+            raise ValueError("missing access token")
+    except (ValueError, KeyError, TypeError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Supabase Auth returned invalid data",
+        ) from exc
+
+    from app.infra.database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        result = exchange_supabase_session(
+            SupabaseExchangeRequest(access_token=supabase_access_token),
+            Response(),
+            None,
+            db,
+        )
+    finally:
+        db.close()
+    return {"access_token": result.access_token, "token_type": "bearer"}
 
 
 def _auth_response(grant: TokenGrant) -> AuthResponse:

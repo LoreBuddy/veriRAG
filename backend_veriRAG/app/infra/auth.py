@@ -7,7 +7,7 @@ from collections.abc import Generator
 
 import bcrypt
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from sqlalchemy.orm import Session
 
@@ -29,10 +29,9 @@ _BCRYPT_SHA256_V2_RE = re.compile(
     r"\$(?P<salt>[^$]{22})\$(?P<digest>[^$]{31})$"
 )
 
-bearer_scheme = HTTPBearer(
+bearer_scheme = OAuth2PasswordBearer(
+    tokenUrl="/auth/token",
     auto_error=False,
-    bearerFormat="JWT",
-    description="Application access token issued by /auth/supabase/exchange or /auth/refresh.",
 )
 
 
@@ -137,7 +136,7 @@ def authenticate_user(db: Session, username: str, password: str) -> User | None:
 
 
 def get_current_user(
-    credentials: str | HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    token: str | None = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> User:
     credentials_exception = HTTPException(
@@ -146,13 +145,8 @@ def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        if credentials is None:
+        if token is None:
             raise credentials_exception
-        token = (
-            credentials.credentials
-            if isinstance(credentials, HTTPAuthorizationCredentials)
-            else credentials
-        )
         username = decode_access_token(token).username
     except InvalidTokenError:
         raise credentials_exception

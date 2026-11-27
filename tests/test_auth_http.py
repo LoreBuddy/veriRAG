@@ -159,6 +159,40 @@ async def test_same_origin_is_allowed_when_cross_origin_credentials_are_disabled
 
 
 @pytest.mark.asyncio
+async def test_swagger_token_accepts_only_bounded_form_body():
+    app = RecordingApp()
+    middleware = _protected(app, credentials=False)
+
+    messages, _ = await _invoke(
+        middleware,
+        path="/auth/token",
+        headers=(
+            (b"origin", b"http://testserver"),
+            (b"content-type", b"application/x-www-form-urlencoded"),
+        ),
+        messages=[
+            {
+                "type": "http.request",
+                "body": b"username=user%40example.com&password=secret",
+                "more_body": False,
+            }
+        ],
+    )
+    assert _status(messages) == 200
+    assert app.calls == 1
+
+    rejected_app = RecordingApp()
+    rejected, receive_calls = await _invoke(
+        _protected(rejected_app, credentials=False),
+        path="/auth/token",
+        headers=((b"origin", b"http://testserver"),),
+    )
+    assert _status(rejected) == 415
+    assert receive_calls == 0
+    assert rejected_app.calls == 0
+
+
+@pytest.mark.asyncio
 async def test_cross_origin_requires_both_credentials_and_explicit_allowlist():
     denied_app = RecordingApp()
     denied = _protected(denied_app, credentials=False)

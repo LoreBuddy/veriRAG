@@ -2,7 +2,7 @@ from app.infra.auth import get_current_user
 from fastapi import Depends, FastAPI
 
 
-def test_openapi_uses_http_bearer_for_application_access_tokens():
+def test_openapi_uses_oauth2_password_for_application_access_tokens():
     app = FastAPI()
     app.add_api_route(
         "/protected",
@@ -12,10 +12,13 @@ def test_openapi_uses_http_bearer_for_application_access_tokens():
 
     schema = app.openapi()
     assert schema["components"]["securitySchemes"] == {
-        "HTTPBearer": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT",
-            "description": "Application access token issued by /auth/supabase/exchange or /auth/refresh.",
+        "OAuth2PasswordBearer": {
+            "type": "oauth2",
+            "flows": {
+                "password": {
+                    "scopes": {},
+                    "tokenUrl": "/auth/token",
+                }
+            },
         }
     }

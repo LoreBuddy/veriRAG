@@ -4,10 +4,11 @@ from uuid import UUID
 
 import httpx
 import pytest
+from fastapi import HTTPException
 from pydantic import SecretStr, ValidationError
 from starlette.responses import Response
 
-from app.api.routes import auth as auth_routes
+from app.api import auth as auth_routes
 from app.auth.supabase import (
     SupabaseAuthUnavailable,
     SupabaseIdentity,
@@ -18,6 +19,7 @@ from app.auth.service import TokenGrant
 from app.core.settings import SecuritySettings
 from app.db.models import User
 from app.schemas import SupabaseExchangeRequest
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 def _settings() -> SecuritySettings:
@@ -37,7 +39,7 @@ def _mock_client(
     def make_client(**kwargs: object) -> httpx.Client:
         return original_client(transport=handler, **kwargs)
 
-    monkeypatch.setattr("backend.auth.supabase.httpx.Client", make_client)
+    monkeypatch.setattr("app.auth.supabase.httpx.Client", make_client)
 
 
 def test_verified_supabase_user_is_resolved_without_exposing_credentials(
@@ -206,3 +208,83 @@ def test_exchange_maps_supabase_uuid_and_never_accepts_client_role(
 
     with pytest.raises(ValidationError):
         SupabaseExchangeRequest(access_token="provider-access", role="admin")
+
+
+def test_swagger_password_login_is_hidden_outside_development(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(
+        auth_routes,
+        "get_settings",
+        lambda: SimpleNamespace(app=SimpleNamespace(environment="production")),
+    )
+    with pytest.raises(HTTPException) as exc_info:
+        auth_routes.swagger_login(
+            OAuth2PasswordRequestForm(username="user@example.com", password="secret")
+        )
+    assert getattr(exc_info.value, "status_code", None) == 404
+
+
+def test_swagger_login_uses_publishable_key_and_existing_session_exchange(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from types import SimpleNamespace
+
+    settings = SimpleNamespace(
+        app=SimpleNamespace(environment="development"),
+        security=_settings(),
+    )
+    monkeypatch.setattr(auth_routes, "get_settings", lambda: settings)
+    original_client = httpx.Client
+
+    def make_client(**kwargs: object) -> httpx.Client:
+        def respond(request: httpx.Request) -> httpx.Response:
+            assert request.method == "POST"
+            assert request.url == (
+                "https://project.supabase.co/auth/v1/token?grant_type=password"
+            )
+            assert request.headers["apikey"] == "sb_publishable_test-key"
+            assert request.read() == (
+                b'{"email":"user@example.com","password":"secret"}'
+            )
+            return httpx.Response(200, json={"access_token": "supabase-access"})
+
+        transport = httpx.MockTransport(
+            respond
+        )
+        return original_client(transport=transport, **kwargs)
+
+    monkeypatch.setattr(auth_routes.httpx, "Client", make_client)
+    monkeypatch.setattr(
+        auth_routes,
+        "verify_supabase_access_token",
+        lambda token, *, settings: SupabaseIdentity(
+            user_id=UUID("ef8b1808-286f-4d54-a006-7a29b91684d8"),
+            email="user@example.com",
+        )
+        if token == "supabase-access"
+        else pytest.fail("unexpected Supabase token"),
+    )
+    grant = auth_routes.AuthResponse(
+        access_token="application-access",
+        token_type="bearer",
+        username="user@example.com",
+        role="user",
+    )
+    monkeypatch.setattr(auth_routes, "exchange_supabase_session", lambda *args: grant)
+    class FakeSession:
+        def close(self) -> None:
+            pass
+
+    import sys
+    from types import ModuleType
+
+    database_module = ModuleType("app.infra.database")
+    database_module.SessionLocal = FakeSession  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "app.infra.database", database_module)
+
+    result = auth_routes.swagger_login(
+        OAuth2PasswordRequestForm(username="user@example.com", password="secret")
+    )
+
+    assert result == {"access_token": "application-access", "token_type": "bearer"}

@@ -382,6 +382,9 @@ class SecuritySettings(_EnvSettings):
         default=SecretStr(""),
         validation_alias="SUPABASE_PUBLISHABLE_KEY",
     )
+    supabase_anon_key: SecretStr = Field(
+        default=SecretStr(""), validation_alias="SUPABASE_ANON_KEY"
+    )
     jwt_secret_key: SecretStr = Field(
         default=SecretStr(""),
         validation_alias="JWT_SECRET_KEY",
@@ -1477,6 +1480,7 @@ class AppSettings(BaseModel):
         payload["rerank"]["api_key"] = "***"
         payload["security"]["jwt_secret_key"] = "***"
         payload["security"]["supabase_publishable_key"] = "***"
+        payload["security"]["supabase_anon_key"] = "***"
         payload["security"]["admin_invite_code"] = "***"
         payload["rate_limits"]["identity_hmac_key"] = "***"
         payload["storage"]["database_url"] = _redact_url(

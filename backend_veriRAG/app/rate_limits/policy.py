@@ -71,6 +71,11 @@ class RoutePolicyRule:
 DEFAULT_ROUTE_POLICY_RULES = (
     RoutePolicyRule(
         methods=frozenset({"POST"}),
+        path_pattern=re.compile(r"/auth/token/?"),
+        policy=AUTH_SUPABASE_EXCHANGE_POLICY,
+    ),
+    RoutePolicyRule(
+        methods=frozenset({"POST"}),
         path_pattern=re.compile(r"/auth/supabase/exchange/?"),
         policy=AUTH_SUPABASE_EXCHANGE_POLICY,
     ),

@@ -15,6 +15,7 @@ AUTH_REQUEST_BODY_LIMIT = 16 * 1024
 _AUTH_PATH_PREFIX = "/auth/"
 _UNSAFE_METHODS = frozenset({"POST", "PUT", "PATCH", "DELETE"})
 _JSON_BODY_PATHS = frozenset({"/auth/supabase/exchange"})
+_FORM_BODY_PATHS = frozenset({"/auth/token"})
 _NO_STORE_HEADERS = {
     "Cache-Control": "no-store",
     "Pragma": "no-cache",
@@ -296,6 +297,25 @@ class AuthRequestGuardMiddleware:
                 stage="auth_content_type",
             )
             return
+        if path in _FORM_BODY_PATHS:
+            content_type = next(
+                (
+                    value.decode("latin-1").split(";", 1)[0].strip().casefold()
+                    for name, value in scope.get("headers", [])
+                    if name.lower() == b"content-type"
+                ),
+                "",
+            )
+            if content_type != "application/x-www-form-urlencoded":
+                await _reject(
+                    scope,
+                    receive,
+                    protected_send,
+                    status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                    detail="认证请求必须使用 application/x-www-form-urlencoded",
+                    stage="auth_content_type",
+                )
+                return
 
         await self.app(scope, receive, protected_send)
 
@@ -359,6 +379,25 @@ class AuthBodyLimitMiddleware:
                 stage="auth_content_type",
             )
             return
+        if path in _FORM_BODY_PATHS:
+            content_type = next(
+                (
+                    value.decode("latin-1").split(";", 1)[0].strip().casefold()
+                    for name, value in scope.get("headers", [])
+                    if name.lower() == b"content-type"
+                ),
+                "",
+            )
+            if content_type != "application/x-www-form-urlencoded":
+                await _reject(
+                    scope,
+                    receive,
+                    send,
+                    status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                    detail="认证请求必须使用 application/x-www-form-urlencoded",
+                    stage="auth_content_type",
+                )
+                return
 
         try:
             body = await _bounded_body(receive, limit=self.max_body_bytes)
