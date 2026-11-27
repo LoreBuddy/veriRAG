@@ -23,11 +23,7 @@ class SupabaseIdentity:
     email: str
 
 
-def verify_supabase_access_token(
-    access_token: str,
-    *,
-    settings: SecuritySettings,
-) -> SupabaseIdentity:
+def verify_supabase_access_token(access_token: str,    *,    settings: SecuritySettings,) -> SupabaseIdentity:
     project_url = settings.supabase_url.strip().rstrip("/")
     publishable_key = settings.supabase_publishable_key.get_secret_value().strip()
     parsed_url = urlsplit(project_url)

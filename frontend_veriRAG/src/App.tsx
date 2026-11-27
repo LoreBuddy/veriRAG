@@ -73,9 +73,7 @@ function toMessage(message: ThreadMessage): Message | null {
 }
 
 export default function App() {
-    const [theme, setTheme] = useState<Theme>(
-        localStorage.getItem('supermew-theme') === 'light' ? 'light' : 'dark'
-    );
+    const [theme, setTheme] = useState<Theme>(localStorage.getItem('supermew-theme') === 'light' ? 'light' : 'dark');
     const [session, setSession] = useState<AuthSession | null>(getAuthSession());
     const [authResolved, setAuthResolved] = useState(false);
     const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
@@ -95,11 +93,8 @@ export default function App() {
     const [historyOpen, setHistoryOpen] = useState(false);
     const [selectedMode, setSelectedMode] = useState<'web-research' | null>(null);
     const [webResearchSkill, setWebResearchSkill] = useState<CapabilitySkill | null>(null);
-    const [webResearchStatus, setWebResearchStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(
-        'idle'
-    );
-    const [webResearchAvailabilityReason, setWebResearchAvailabilityReason] =
-        useState<CapabilityAvailabilityReason>(null);
+    const [webResearchStatus, setWebResearchStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+    const [webResearchAvailabilityReason, setWebResearchAvailabilityReason] =useState<CapabilityAvailabilityReason>(null);
     const [webResearchError, setWebResearchError] = useState('');
     const threadLoadGeneration = useRef(0);
 
