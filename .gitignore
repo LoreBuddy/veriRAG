@@ -1,6 +1,13 @@
 # Local environment specific
 .azure/
 firebase_service_account.json
+# dependencies
+/dist
+/node_modules
+node_modules
+**/node_modules/
+/.pnp
+.pnp.js
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

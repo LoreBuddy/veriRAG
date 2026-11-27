@@ -6,6 +6,7 @@ import type { ThreadMessage } from '@/types/threads';
 
 const PAGE_SIZE = 1000;
 
+
 /** Pulls every event after the projection's last sequence and folds it in. */
 export async function replayRunEvents(
     initialState: RunEventState,
