@@ -1,3 +1,6 @@
+import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
 export const apiBaseUrl = (import.meta.env.VITE_CORE_API ?? '').trim().replace(/\/+$/, '');
 
 if (!apiBaseUrl && import.meta.env.PROD) {
