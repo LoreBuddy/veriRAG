@@ -16,7 +16,7 @@ from app.schemas.models import (
 )
 
 
-router = APIRouter(prefix="/v1/models", tags=["models"])
+modelRou = APIRouter(prefix="/v1/models", tags=["models"])
 
 
 def get_model_control_service() -> ModelControlService:
@@ -34,7 +34,7 @@ def _require_admin(user: User) -> None:
         )
 
 
-@router.get("", response_model=ModelControlPlaneResponse)
+@modelRou.get("", response_model=ModelControlPlaneResponse)
 async def get_models(
     current_user: User = Depends(get_current_user),
     service: ModelControlService = Depends(get_model_control_service),
@@ -44,7 +44,7 @@ async def get_models(
     return ModelControlPlaneResponse.model_validate(snapshot)
 
 
-@router.post(
+@modelRou.post(
     "",
     response_model=ModelControlPlaneResponse,
     status_code=status.HTTP_201_CREATED,
@@ -65,7 +65,7 @@ async def create_model(
     )
 
 
-@router.put("/{profile_id}", response_model=ModelControlPlaneResponse)
+@modelRou.put("/{profile_id}", response_model=ModelControlPlaneResponse)
 async def update_model(
     profile_id: str,
     request: ModelProfileUpdateRequest,
@@ -84,7 +84,7 @@ async def update_model(
     )
 
 
-@router.delete("/{profile_id}", response_model=ModelDeleteResponse)
+@modelRou.delete("/{profile_id}", response_model=ModelDeleteResponse)
 async def delete_model(
     profile_id: str,
     current_user: User = Depends(get_current_user),
@@ -99,7 +99,7 @@ async def delete_model(
     return ModelDeleteResponse(profile_id=profile_id, deleted=True)
 
 
-@router.put(
+@modelRou.put(
     "/assignments/{role}",
     response_model=ModelControlPlaneResponse,
 )
@@ -121,4 +121,4 @@ async def assign_model(
     )
 
 
-__all__ = ["get_model_control_service", "router"]
+__all__ = ["get_model_control_service", "modelRou"]

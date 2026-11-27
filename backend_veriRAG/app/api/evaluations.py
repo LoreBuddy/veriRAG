@@ -29,7 +29,7 @@ from app.schemas.evaluations import (
 )
 
 
-router = APIRouter(prefix="/v1/rag-evaluations", tags=["rag-evaluations"])
+evaRou = APIRouter(prefix="/v1/rag-evaluations", tags=["rag-evaluations"])
 
 
 def get_rag_evaluation_service() -> RagEvaluationService:
@@ -100,7 +100,7 @@ def _case_response(record: RagEvaluationCaseRecord) -> RagEvaluationCaseResponse
     return RagEvaluationCaseResponse(**record.model_dump())
 
 
-@router.get("/datasets", response_model=RagEvaluationDatasetsResponse)
+@evaRou.get("/datasets", response_model=RagEvaluationDatasetsResponse)
 async def list_datasets(
     limit: int = Query(default=100, ge=1, le=500),
     current_user: User = Depends(get_current_user),
@@ -113,7 +113,7 @@ async def list_datasets(
     )
 
 
-@router.post(
+@evaRou.post(
     "/datasets",
     response_model=RagEvaluationDatasetResponse,
     status_code=status.HTTP_201_CREATED,
@@ -132,7 +132,7 @@ async def create_dataset(
     return _dataset_response(record)
 
 
-@router.get(
+@evaRou.get(
     "/datasets/{dataset_id}",
     response_model=RagEvaluationDatasetResponse,
 )
@@ -145,7 +145,7 @@ async def get_dataset(
     return _dataset_response(await run_in_threadpool(service.get_dataset, dataset_id))
 
 
-@router.get("/jobs", response_model=RagEvaluationJobsResponse)
+@evaRou.get("/jobs", response_model=RagEvaluationJobsResponse)
 async def list_jobs(
     job_status: RagEvaluationJobStatus | None = Query(default=None, alias="status"),
     limit: int = Query(default=100, ge=1, le=500),
@@ -163,7 +163,7 @@ async def list_jobs(
     )
 
 
-@router.post(
+@evaRou.post(
     "/jobs",
     response_model=RagEvaluationJobResponse,
     status_code=status.HTTP_202_ACCEPTED,
@@ -184,7 +184,7 @@ async def create_job(
     return _job_response(record)
 
 
-@router.get("/jobs/{job_id}", response_model=RagEvaluationJobResponse)
+@evaRou.get("/jobs/{job_id}", response_model=RagEvaluationJobResponse)
 async def get_job(
     job_id: str,
     current_user: User = Depends(get_current_user),
@@ -194,7 +194,7 @@ async def get_job(
     return _job_response(await run_in_threadpool(service.get_job, job_id))
 
 
-@router.get(
+@evaRou.get(
     "/jobs/{job_id}/cases",
     response_model=RagEvaluationCasesResponse,
 )
@@ -210,7 +210,7 @@ async def list_cases(
     )
 
 
-@router.post(
+@evaRou.post(
     "/jobs/{job_id}/cancel",
     response_model=RagEvaluationJobResponse,
 )
@@ -223,4 +223,4 @@ async def cancel_job(
     return _job_response(await run_in_threadpool(service.cancel_job, job_id))
 
 
-__all__ = ["get_rag_evaluation_service", "router"]
+__all__ = ["get_rag_evaluation_service", "evaRou"]

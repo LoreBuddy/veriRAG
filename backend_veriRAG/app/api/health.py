@@ -12,15 +12,15 @@ from app.providers.runtime import provider_runtime
 from app.sandbox import get_sandbox_runtime
 
 
-router = APIRouter(tags=["health"])
+healthRou = APIRouter(tags=["health"])
 
 
-@router.get("/health/live")
+@healthRou.get("/health/live")
 async def live() -> dict[str, str]:
     return {"status": "live"}
 
 
-@router.get("/health/ready")
+@healthRou.get("/health/ready")
 async def ready() -> JSONResponse:
     snapshot = provider_runtime.readiness()
     worker_settings = provider_runtime.settings.worker
@@ -195,4 +195,4 @@ async def ready() -> JSONResponse:
     )
 
 
-__all__ = ["router"]
+__all__ = ["healthRou"]
