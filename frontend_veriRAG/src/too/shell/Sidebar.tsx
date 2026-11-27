@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import superMewMark from '@/assets/images/supermew-mark.png';
-import { logout } from '@/features/auth/logout';
-import { useChatStore } from '@/features/chat/chat-store';
+import { logout } from '@/too/auth/logout';
+import { useChatStore } from '@/too/chat/chat-store';
 import { useAuthStore } from '@/stores/auth-store';
 import { useThreadStore } from '@/stores/thread-store';
 import { useUiStore } from '@/stores/ui-store';

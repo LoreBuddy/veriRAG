@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import emptyHistory from '@/assets/images/empty-history.webp';
-import { useChatStore } from '@/features/chat/chat-store';
+import { useChatStore } from '@/too/chat/chat-store';
 import { useThreadStore } from '@/stores/thread-store';
 import { useUiStore } from '@/stores/ui-store';
 

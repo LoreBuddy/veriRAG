@@ -1,9 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router';
-import AppShell from '@/features/shell/AppShell';
-import LoginPage from '@/features/auth/LoginPage';
-import ChatPage from '@/features/chat/ChatPage';
-import PlaceholderPage from '@/features/admin/PlaceholderPage';
-import { PublicOnly, RequireAdmin, RequireAuth } from '@/features/auth/guards';
+import AppShell from '@/too/shell/AppShell';
+import LoginPage from '@/too/auth/LoginPage';
+import ChatPage from '@/too/chat/ChatPage';
+import PlaceholderPage from '@/too/admin/PlaceholderPage';
+import { PublicOnly, RequireAdmin, RequireAuth } from '@/too/auth/guards';
 
 export const router = createBrowserRouter([
     {
@@ -25,13 +25,13 @@ export const router = createBrowserRouter([
                             {
                                 path: 'knowledge',
                                 lazy: async () => ({
-                                    Component: (await import('@/features/admin/KnowledgePage')).default,
+                                    Component: (await import('@/too/admin/KnowledgePage')).default,
                                 }),
                             },
                             {
                                 path: 'capabilities',
                                 lazy: async () => ({
-                                    Component: (await import('@/features/admin/CapabilitiesPage')).default,
+                                    Component: (await import('@/too/admin/CapabilitiesPage')).default,
                                 }),
                             },
                             { path: 'models', element: <PlaceholderPage title="模型中心" /> },

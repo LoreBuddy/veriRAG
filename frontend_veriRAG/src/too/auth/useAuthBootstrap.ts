@@ -3,7 +3,7 @@ import { clearAuthSession, restoreAuthSession, subscribeAuthSession } from '@/au
 import { useAuthStore } from '@/stores/auth-store';
 import { useThreadStore } from '@/stores/thread-store';
 import { useWebResearchStore } from '@/stores/web-research-store';
-import { useChatStore } from '@/features/chat/chat-store';
+import { useChatStore } from '@/too/chat/chat-store';
 
 /** Mirrors the auth session module into the store and restores the session on load. */
 export function useAuthBootstrap(): void {

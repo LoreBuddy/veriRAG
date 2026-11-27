@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router';
 import { router } from '@/app/router';
-import { useAuthBootstrap } from '@/features/auth/useAuthBootstrap';
+import { useAuthBootstrap } from '@/too/auth/useAuthBootstrap';
 
 export default function App() {
     useAuthBootstrap();
