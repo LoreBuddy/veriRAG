@@ -13,10 +13,7 @@ from app.api.resources import (
 )
 from app.core.errors import AppError, ErrorCode
 from app.db.models import User
-from app.documents.catalog import (
-    CleanupJobStatus,
-    DocumentRecord,
-)
+from app.documents.catalog import (    CleanupJobStatus,    DocumentRecord,)
 from app.infra.auth import require_admin
 from app.schemas import (
     DocumentDeleteJobResponse,
@@ -29,7 +26,7 @@ from app.schemas import (
 from app.security.uploads import store_upload
 
 
-router = APIRouter(tags=["documents"])
+docRou = APIRouter(tags=["documents"])
 
 
 def _display_file_type(filename: str, media_type: str) -> str:
@@ -248,7 +245,7 @@ def _list_delete_job_views_sync() -> list[dict]:
     return [_delete_job_view_sync(operation.id) for operation in operations]
 
 
-@router.get("/documents", response_model=DocumentListResponse)
+@docRou.get("/documents", response_model=DocumentListResponse)
 async def list_documents(_: User = Depends(require_admin)):
     try:
         return DocumentListResponse(
@@ -265,7 +262,7 @@ async def list_documents(_: User = Depends(require_admin)):
         ) from exc
 
 
-@router.post(
+@docRou.post(
     "/documents/upload/async",
     response_model=DocumentUploadStartResponse,
     status_code=202,
@@ -308,7 +305,7 @@ async def upload_document_async(
     )
 
 
-@router.get(
+@docRou.get(
     "/documents/upload/jobs/{job_id}",
     response_model=DocumentUploadJobResponse,
 )
@@ -318,7 +315,7 @@ async def get_upload_job(job_id: str, _: User = Depends(require_admin)):
     )
 
 
-@router.get(
+@docRou.get(
     "/documents/upload/jobs",
     response_model=list[DocumentUploadJobResponse],
 )
@@ -327,7 +324,7 @@ async def list_upload_jobs(_: User = Depends(require_admin)):
     return [DocumentUploadJobResponse(**job) for job in jobs]
 
 
-@router.delete(
+@docRou.delete(
     "/documents/delete/async/{filename}",
     response_model=DocumentDeleteStartResponse,
     status_code=202,
@@ -358,7 +355,7 @@ async def delete_document_async(
     )
 
 
-@router.get(
+@docRou.get(
     "/documents/delete/jobs/{job_id}",
     response_model=DocumentDeleteJobResponse,
 )
@@ -368,7 +365,7 @@ async def get_delete_job(job_id: str, _: User = Depends(require_admin)):
     )
 
 
-@router.get(
+@docRou.get(
     "/documents/delete/jobs",
     response_model=list[DocumentDeleteJobResponse],
 )
