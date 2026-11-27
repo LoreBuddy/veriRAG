@@ -18,6 +18,7 @@ dependencies = [
     "redis>=8.2.0",
     "sqlalchemy[asyncio]>=2.1.9",
     "sqlglot>=30.35.0",
+    "langchain-openai>=1.8.5",
 ]
 
 [tool.ruff]

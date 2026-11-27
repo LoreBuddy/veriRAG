@@ -43,6 +43,7 @@ export default function WelcomeScreen() {
                     <strong>智能对话</strong>
                     <small>自动选择工具</small>
                 </button>
+
                 <button type="button">
                     <span>
                         <i className="fa-solid fa-book-open" />
@@ -50,6 +51,7 @@ export default function WelcomeScreen() {
                     <strong>知识库</strong>
                     <small>检索私有知识</small>
                 </button>
+                
                 <button
                     type="button"
                     className={selected ? 'active' : ''}
@@ -64,6 +66,7 @@ export default function WelcomeScreen() {
                     <strong>网络研究</strong>
                     <small>{webResearchHint}</small>
                 </button>
+                
                 <button type="button">
                     <span>
                         <i className="fa-solid fa-database" />
@@ -71,6 +74,7 @@ export default function WelcomeScreen() {
                     <strong>SQL 助手</strong>
                     <small>只读分析数据</small>
                 </button>
+                
                 <button type="button">
                     <span>
                         <i className="fa-solid fa-terminal" />
