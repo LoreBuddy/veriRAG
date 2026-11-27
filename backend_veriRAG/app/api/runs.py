@@ -21,7 +21,7 @@ from app.schemas.runs import (RunCreateRequest,RunCreateResponse,RunResumeReques
 from app.threads.contracts import ThreadId
 
 
-router = APIRouter(prefix="/v1", tags=["runs"])
+runRou = APIRouter(prefix="/v1", tags=["runs"])
 
 
 async def _reserve_run(*, user: User, thread_id: ThreadId, request: RunCreateRequest):
@@ -132,7 +132,7 @@ def _stream_response(
     )
 
 
-@router.post("/threads/{thread_id}/runs", response_model=RunCreateResponse, status_code=status.HTTP_201_CREATED,)
+@runRou.post("/threads/{thread_id}/runs", response_model=RunCreateResponse, status_code=status.HTTP_201_CREATED,)
 async def create_run(thread_id: ThreadId,    request: RunCreateRequest,    current_user: User = Depends(get_current_user),):
     reservation = await _reserve_run(
         user=current_user,
@@ -146,7 +146,7 @@ async def create_run(thread_id: ThreadId,    request: RunCreateRequest,    curre
     )
 
 
-@router.get("/runs/{run_id}", response_model=RunResponse)
+@runRou.get("/runs/{run_id}", response_model=RunResponse)
 async def get_run(run_id: str, current_user: User = Depends(get_current_user)):
     run = await run_in_threadpool(
         service.get_run,
@@ -156,7 +156,7 @@ async def get_run(run_id: str, current_user: User = Depends(get_current_user)):
     return RunResponse(**run.__dict__)
 
 
-@router.post("/runs/{run_id}/cancel", response_model=RunResponse)
+@runRou.post("/runs/{run_id}/cancel", response_model=RunResponse)
 async def cancel_run(run_id: str, current_user: User = Depends(get_current_user)):
     requested = await run_in_threadpool(
         service.request_cancel,
@@ -176,7 +176,7 @@ async def cancel_run(run_id: str, current_user: User = Depends(get_current_user)
     return RunResponse(**run.__dict__)
 
 
-@router.post(
+@runRou.post(
     "/runs/{run_id}/resume",
     response_model=RunResumeResponse,
     status_code=status.HTTP_202_ACCEPTED,
@@ -208,7 +208,7 @@ async def resume_run(
     )
 
 
-@router.get("/runs/{run_id}/events", response_model=RunEventsResponse)
+@runRou.get("/runs/{run_id}/events", response_model=RunEventsResponse)
 async def get_run_events(
     run_id: str,
     after: int = Query(default=0, ge=0),
@@ -228,7 +228,7 @@ async def get_run_events(
     )
 
 
-@router.get("/runs/{run_id}/stream")
+@runRou.get("/runs/{run_id}/stream")
 async def stream_run_events(
     run_id: str,
     after: int = Query(default=0, ge=0),
@@ -242,7 +242,7 @@ async def stream_run_events(
     )
 
 
-@router.post("/threads/{thread_id}/runs/stream")
+@runRou.post("/threads/{thread_id}/runs/stream")
 async def create_run_stream(
     thread_id: ThreadId,
     request: RunCreateRequest,
