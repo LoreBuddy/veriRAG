@@ -5,14 +5,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 BACKEND_ROOT = Path(__file__).resolve().parent
-PROJECT_ROOT = BACKEND_ROOT.parent
 ENV_FILE = BACKEND_ROOT / ".env"
 _LOADED = False
 
 
 def load_env() -> None:
     global _LOADED
-    if _LOADED:
-        return
+    if _LOADED: return
     load_dotenv(ENV_FILE)
     _LOADED = True
