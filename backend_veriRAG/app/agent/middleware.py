@@ -789,6 +789,8 @@ class DynamicContextMiddleware(AgentMiddleware):
         final_response = _requires_final_response(request)
         if final_response:
             request = _final_response_request(request)
+        elif context.active_skill_allows_tool("search_knowledge_base"):
+            request = request.override(tool_choice="required")
         visible_tools = (
             None
             if request.tools is None

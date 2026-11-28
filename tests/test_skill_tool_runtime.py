@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -28,6 +29,7 @@ class ScriptedChatModel(BaseChatModel):
     responses: list[AIMessage]
     response_index: int = 0
     bound_tool_names: list[list[str]] = Field(default_factory=list)
+    bound_tool_choices: list[str | None] = Field(default_factory=list)
     received_messages: list[list[BaseMessage]] = Field(default_factory=list)
 
     @property
@@ -35,6 +37,7 @@ class ScriptedChatModel(BaseChatModel):
         return "scripted-skill-tool-runtime-test"
 
     def bind_tools(self, tools, *, tool_choice=None, **kwargs):
+        self.bound_tool_choices.append(tool_choice)
         self.bound_tool_names.append(
             [
                 str(
@@ -82,7 +85,7 @@ def _settings():
 def _load_project_skills(registry: ToolRegistry) -> SkillRegistry:
     project_root = Path(__file__).resolve().parents[1]
     return SkillRegistry.load(
-        project_root / "backend" / "skills" / "catalog",
+        project_root / "backend_veriRAG" / "app" / "skills" / "catalog",
         registry.names,
     )
 
@@ -749,6 +752,72 @@ async def test_slash_skill_activates_before_first_model_call_and_denies_forged_w
         "TOOL_POLICY_DENIED" in str(message.content) for message in second_tool_messages
     )
     assert "tool.denied" in {event["stage"] for event in result.runtime_trace}
+
+
+def test_knowledge_base_skill_requires_search_for_short_document_heading():
+    heading = "LINE COOK / BUTCHER, PREP COOK, SAUTE AND GRILL (Hot Line)"
+    retrieval_queries: list[str] = []
+
+    @tool("search_knowledge_base")
+    def fake_search_knowledge_base(query: str) -> str:
+        """Search the uploaded knowledge base."""
+
+        retrieval_queries.append(query)
+        return f'Retrieved Chunks:\n[1] "{heading}"'
+
+    model = ScriptedChatModel(
+        responses=[
+            AIMessage(
+                content="",
+                tool_calls=[
+                    {
+                        "name": "search_knowledge_base",
+                        "args": {"query": heading},
+                        "id": "call-search-knowledge-base",
+                        "type": "tool_call",
+                    }
+                ],
+            ),
+            AIMessage(content=f'The PDF lists "{heading}". [1]'),
+        ]
+    )
+    registry = build_default_tool_registry()
+    factory = AgentRuntimeFactory(
+        settings=_settings(),
+        models=_FixedModels(model),
+        tools=registry,
+        skills=_load_project_skills(registry),
+        secret_names_provider=lambda _registry: frozenset(),
+    )
+    request_context = RunRequestContext.for_sync(
+        user_id="alice",
+        thread_id="short-knowledge-query",
+    )
+    runtime = factory.create(
+        request_context,
+        allowed_tools=factory.tool_ceiling,
+        tool_overrides={"search_knowledge_base": fake_search_knowledge_base},
+    )
+    try:
+        result = asyncio.run(
+            runtime.ainvoke(
+                AgentRuntimeInput(
+                    history=[],
+                    user_text=f"/knowledge-base\n{heading}",
+                )
+            )
+        )
+    finally:
+        request_context.close()
+
+    assert retrieval_queries == [heading]
+    assert model.bound_tool_choices[0] == "required"
+    assert result.content == f'The PDF lists "{heading}". [1]'
+    assert any(
+        event["stage"] == "tool.completed"
+        and event["tool_name"] == "search_knowledge_base"
+        for event in result.runtime_trace
+    )
 
 
 async def test_tool_search_remains_available_without_an_active_skill(

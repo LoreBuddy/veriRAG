@@ -389,7 +389,7 @@ class RuntimeMiddlewareTests(unittest.TestCase):
             + "</instructions></active_skill>"
         )
         context.skill_session = SimpleNamespace(
-            active=object(),
+            active=SimpleNamespace(allowed_tools=frozenset()),
             catalog_context=lambda: (
                 "<skill_catalog>" + "summary-entry" * 300 + "</skill_catalog>"
             ),
@@ -449,7 +449,7 @@ class RuntimeMiddlewareTests(unittest.TestCase):
             + "</instructions></active_skill>"
         )
         context.skill_session = SimpleNamespace(
-            active=object(),
+            active=SimpleNamespace(allowed_tools=frozenset()),
             catalog_context=lambda: "<skill_catalog />",
             active_context=lambda: active_context,
         )
