@@ -30,6 +30,7 @@ import emptyHistory from '@/assets/images/empty-history.webp';
 const CapabilityAdminPage = lazy(() => import('@/components/Capabilities/CapabilityAdminPage'));
 const KnowledgeBasePage = lazy(() => import('@/components/Documents/KnowledgeBasePage'));
 const ModelCenterPage = lazy(() => import('@/components/Models/ModelCenterPage'));
+const EvaluationsPage = lazy(() => import('@/too/admin/EvaluationsPage'));
 
 type Theme = 'dark' | 'light';
 type Nav = 'chat' | 'history' | 'settings' | 'models' | 'capabilities' | 'evaluations';
@@ -1278,12 +1279,14 @@ export default function App() {
                                         ? 'chat-area model-center-host'
                                     : nav === 'settings'
                                         ? 'chat-area knowledge-base-host'
+                                    : nav === 'evaluations'
+                                        ? 'chat-area evaluation-host'
                                         : 'chat-area'
                             }
                             style={{
                                 width: '100%',
                                 padding:
-                                    nav === 'capabilities' || nav === 'settings' || nav === 'models'
+                                    nav === 'capabilities' || nav === 'settings' || nav === 'models' || nav === 'evaluations'
                                         ? 0
                                         : 32,
                             }}
@@ -1303,8 +1306,12 @@ export default function App() {
                                 <Suspense fallback={<div role="status">正在加载模型中心…</div>}>
                                     <ModelCenterPage key={session?.username} />
                                 </Suspense>
+                            ) : nav === 'evaluations' ? (
+                                <Suspense fallback={<div role="status">正在加载 RAG 评估…</div>}>
+                                    <EvaluationsPage key={session?.username} />
+                                </Suspense>
                             ) : (
-                                <h1>RAG 评估</h1>
+                                <h1>管理工作区</h1>
                             )}
                         </section>
                     )}
