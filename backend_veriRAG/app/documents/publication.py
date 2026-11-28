@@ -33,7 +33,7 @@ from app.indexing.milvus_writer import (
 )
 from app.indexing.parent_chunk_store import ParentChunkStore
 from app.security.uploads import StoredUpload
-
+from app.infra.supa_file_store import delete_file, ensure_local, push_local
 
 logger = logging.getLogger(__name__)
 
@@ -167,13 +167,23 @@ def _source_path(upload_dir: Path, object_key: str) -> Path:
             "文档对象路径无效",
             status_code=503,
         )
+    # if not path.is_file():
+    #     raise AppError(
+    #         ErrorCode.STORAGE_UNAVAILABLE,
+    #         "待处理文档对象不存在",
+    #         status_code=503,
+    #         retryable=True,
+    #     )
+    # return path
     if not path.is_file():
-        raise AppError(
-            ErrorCode.STORAGE_UNAVAILABLE,
-            "待处理文档对象不存在",
-            status_code=503,
-            retryable=True,
-        )
+        try:
+            path = ensure_local(object_key)        # NEW: pull from Supabase
+        except Exception as exc:
+            raise AppError(
+                ErrorCode.STORAGE_UNAVAILABLE,"待处理文档对象不存在",
+                status_code=503,
+                retryable=True,
+            ) from exc
     return path
 
 
@@ -199,6 +209,7 @@ class DocumentPublication:
 
     def submit(self, stored_upload: StoredUpload, owner_id: int) -> UploadReservation:
         try:
+            push_local(stored_upload.object_key) 
             knowledge_base = self.catalog.ensure_knowledge_base(
                 tenant_id=self.config.tenant_id,
                 owner_id=owner_id,
@@ -230,6 +241,8 @@ class DocumentPublication:
         if path.parent == root:
             with suppress(OSError):
                 path.unlink(missing_ok=True)
+        with suppress(Exception):
+            delete_file(stored_upload.object_key)
 
     def _update_job(
         self,
@@ -1035,12 +1048,17 @@ class DocumentPublication:
         root = self.config.upload_dir.resolve()
         path = (root / version.source_object_key).resolve()
         if path.parent != root:
-            raise AppError(
-                ErrorCode.STORAGE_UNAVAILABLE,
-                "文档对象清理路径无效",
-                status_code=503,
+            raise AppError(ErrorCode.STORAGE_UNAVAILABLE,"文档对象清理路径无效",status_code=503,
             )
         path.unlink(missing_ok=True)
+        try:                                       # NEW
+            delete_file(version.source_object_key)
+        except Exception as exc:
+            raise AppError(
+                ErrorCode.STORAGE_UNAVAILABLE,"远程文档对象清理失败",
+                status_code=503,
+                retryable=True,
+            ) from exc
 
     def retire(
         self,
