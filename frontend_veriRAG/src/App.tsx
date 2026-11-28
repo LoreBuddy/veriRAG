@@ -394,6 +394,7 @@ export default function App() {
                     ...current,
                 ]);
             }
+            
             if (!isCurrentThread()) return;
             const created = await createRun(
                 targetThreadId,
