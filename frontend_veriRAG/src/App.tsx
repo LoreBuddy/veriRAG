@@ -15,6 +15,7 @@ import { createRun, getRun, getRunEvents } from '@/runs/runClient';
 import { applyRunEvent, initialRunEventState, type RunEventState } from '@/events/runEventReducer';
 import { getCapabilityCatalog } from '@/capabilities/capabilityClient';
 import { createWebResearchMessage } from '@/capabilities/webResearchMessage';
+import { createSkillMessage } from '@/capabilities/skillMessage';
 import type {
     CapabilityAvailabilityReason,
     CapabilitySkill,
@@ -91,8 +92,9 @@ export default function App() {
     const [sending, setSending] = useState(false);
     const [sendingThreadId, setSendingThreadId] = useState('');
     const [historyOpen, setHistoryOpen] = useState(false);
-    const [selectedMode, setSelectedMode] = useState<'web-research' | null>(null);
+    const [selectedMode, setSelectedMode] = useState<'web-research' | 'knowledge-base' | null>(null);
     const [webResearchSkill, setWebResearchSkill] = useState<CapabilitySkill | null>(null);
+    const [knowledgeBaseSkill, setKnowledgeBaseSkill] = useState<CapabilitySkill | null>(null);
     const [webResearchStatus, setWebResearchStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
     const [webResearchAvailabilityReason, setWebResearchAvailabilityReason] =useState<CapabilityAvailabilityReason>(null);
     const [webResearchError, setWebResearchError] = useState('');
@@ -133,6 +135,7 @@ export default function App() {
         let current = true;
         setSelectedMode(null);
         setWebResearchSkill(null);
+        setKnowledgeBaseSkill(null);
         setWebResearchAvailabilityReason(null);
         setWebResearchError('');
 
@@ -147,9 +150,12 @@ export default function App() {
         void getCapabilityCatalog()
             .then((catalog) => {
                 if (!current) return;
-                const skill = catalog.skills.find((item) => item.name === 'web-research') || null;
-                setWebResearchSkill(skill);
-                setWebResearchAvailabilityReason(skill?.availability_reason ?? 'not_configured');
+                const webSkill = catalog.skills.find((item) => item.name === 'web-research') || null;
+                const knowledgeSkill =
+                    catalog.skills.find((item) => item.name === 'knowledge-base') || null;
+                setWebResearchSkill(webSkill);
+                setKnowledgeBaseSkill(knowledgeSkill);
+                setWebResearchAvailabilityReason(webSkill?.availability_reason ?? 'not_configured');
                 setWebResearchStatus('ready');
             })
             .catch((error: unknown) => {
@@ -234,11 +240,15 @@ export default function App() {
         try {
             const catalog = await getCapabilityCatalog();
             if (getAuthSession()?.username !== username) return;
-            const skill = catalog.skills.find((item) => item.name === 'web-research') || null;
-            setWebResearchSkill(skill);
-            setWebResearchAvailabilityReason(skill?.availability_reason ?? 'not_configured');
+            const webSkill = catalog.skills.find((item) => item.name === 'web-research') || null;
+            const knowledgeSkill =
+                catalog.skills.find((item) => item.name === 'knowledge-base') || null;
+            setWebResearchSkill(webSkill);
+            setKnowledgeBaseSkill(knowledgeSkill);
+            setWebResearchAvailabilityReason(webSkill?.availability_reason ?? 'not_configured');
             setWebResearchStatus('ready');
-            if (!skill?.available) setSelectedMode(null);
+            if (!webSkill?.available && selectedMode === 'web-research') setSelectedMode(null);
+            if (!knowledgeSkill?.available && selectedMode === 'knowledge-base') setSelectedMode(null);
         } catch (error: unknown) {
             if (getAuthSession()?.username === username) {
                 const message = error instanceof Error ? error.message : '网络研究配置更新失败。';
@@ -337,7 +347,9 @@ export default function App() {
         const executionMessage =
             selectedMode === 'web-research' && webResearchSkill
                 ? createWebResearchMessage(text, webResearchSkill.activation)
-                : text;
+                : selectedMode === 'knowledge-base'
+                    ? createSkillMessage(text, knowledgeBaseSkill)
+                    : text;
         setSending(true);
         setSendingThreadId(threadId);
         setInput('');
@@ -648,7 +660,7 @@ export default function App() {
                                     onClick={() => setNav('settings')}
                                 >
                                     <i className="fa-regular fa-bookmark" />
-                                    <span>知识库</span>
+                                    <span>Knowledge Base</span>
                                 </button>
                                 <button
                                     type="button"
@@ -986,7 +998,21 @@ export default function App() {
                                                     <strong>智能对话</strong>
                                                     <small>自动选择合适工具</small>
                                                 </button>
-                                                <button type="button" onClick={() => setNav('chat')}>
+                                                <button
+                                                    type="button"
+                                                    className={selectedMode === 'knowledge-base' ? 'active' : ''}
+                                                    aria-pressed={selectedMode === 'knowledge-base'}
+                                                    disabled={
+                                                        webResearchStatus === 'loading' ||
+                                                        !knowledgeBaseSkill?.available
+                                                    }
+                                                    title={
+                                                        knowledgeBaseSkill?.available
+                                                            ? '使用知识库问答'
+                                                            : '知识库能力尚未就绪'
+                                                    }
+                                                    onClick={() => setSelectedMode('knowledge-base')}
+                                                >
                                                     <span>
                                                         <i className="fa-solid fa-book-open" />
                                                     </span>
@@ -1140,6 +1166,19 @@ export default function App() {
                                     )}
                                 </div>
                                 <div className="input-area-wrapper">
+                                    {selectedMode === 'knowledge-base' && (
+                                        <div className="selected-mode-banner">
+                                            <i className="fa-solid fa-book-open" aria-hidden="true" />
+                                            <span>知识库问答 · 检索私有知识</span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setSelectedMode(null)}
+                                                aria-label="切回智能对话"
+                                            >
+                                                切回智能对话
+                                            </button>
+                                        </div>
+                                    )}
                                     {selectedMode === 'web-research' && (
                                         <div className="selected-mode-banner">
                                             <i className="fa-solid fa-globe" aria-hidden="true" />
@@ -1153,7 +1192,7 @@ export default function App() {
                                             </button>
                                         </div>
                                     )}
-                                    {selectedMode !== 'web-research' && messages.length > 0 && (
+                                    {selectedMode === null && messages.length > 0 && (
                                         <div className="selected-mode-banner">
                                             <i className="fa-solid fa-globe" aria-hidden="true" />
                                             <span>需要查询公开来源？</span>
@@ -1185,7 +1224,9 @@ export default function App() {
                                             placeholder={
                                                 selectedMode === 'web-research'
                                                     ? '描述要调研的公开问题…'
-                                                    : '和喵喵说点什么吧...'
+                                                    : selectedMode === 'knowledge-base'
+                                                        ? '询问已上传文档，并说明需要引用的范围…'
+                                                        : '和喵喵说点什么吧...'
                                             }
                                             rows={1}
                                         />
@@ -1207,7 +1248,9 @@ export default function App() {
                                         <span>
                                             {selectedMode === 'web-research'
                                                 ? '网页信息可能过时，请核对来源与发布时间。'
-                                                : 'SuperMew · 可信知识工作台'}
+                                                : selectedMode === 'knowledge-base'
+                                                    ? '回答将基于已上传文档并链接原始证据。'
+                                                    : 'SuperMew · 可信知识工作台'}
                                         </span>
                                         <span>
                                             <kbd>Enter</kbd> 发送 · <kbd>Shift</kbd> + <kbd>Enter</kbd> 换行
