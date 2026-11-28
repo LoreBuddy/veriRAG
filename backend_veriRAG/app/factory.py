@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import router
 from app.core.settings import get_settings
-from env import load_env
+from app.env import load_env
 load_env()
 
 
