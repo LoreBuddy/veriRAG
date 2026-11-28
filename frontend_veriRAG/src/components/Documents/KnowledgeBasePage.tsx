@@ -804,7 +804,7 @@ export default function KnowledgeBasePage() {
         </button>
       </header>
 
-      {workspaceNotice && (
+      {/* {workspaceNotice && (
         <p className="operation-notice" role="status" aria-live="polite">
           {workspaceNotice}
         </p>
@@ -820,7 +820,7 @@ export default function KnowledgeBasePage() {
           排队任务：{queuedIndexJobs}）。已保存的候选版本会留在队列中，直到 Worker 恢复。
           可在仓库根目录运行 <code>uv run --no-sync python -m backend.workers.indexing</code>。
         </p>
-      )}
+      )} */}
 
       <section className="settings-stats" aria-label="知识库概况">
         <article>
