@@ -177,10 +177,11 @@ def _source_path(upload_dir: Path, object_key: str) -> Path:
     # return path
     if not path.is_file():
         try:
-            path = ensure_local(object_key)        # NEW: pull from Supabase
+            path = ensure_local(object_key)  # NEW: pull from Supabase
         except Exception as exc:
             raise AppError(
-                ErrorCode.STORAGE_UNAVAILABLE,"待处理文档对象不存在",
+                ErrorCode.STORAGE_UNAVAILABLE,
+                "待处理文档对象不存在",
                 status_code=503,
                 retryable=True,
             ) from exc
@@ -188,7 +189,32 @@ def _source_path(upload_dir: Path, object_key: str) -> Path:
 
 
 class DocumentPublication:
-    """隐藏跨 Catalog、ParentChunk 与 Milvus 的两阶段发布 Implementation。"""
+    """隐藏跨 Catalog、ParentChunk 与 Milvus 的两阶段发布 Implementation。
+    1. Wiring at startup. `indexing.py` creates `IndexingWorker()`. Its __init__ in worker.py builds 
+    `DocumentPublication(catalog=...).` That constructor creates the `DocumentLoader`, `ParentChunkStore` and `MilvusWriter`
+    so everything publication needs is ready before any job arrives.
+    2.The loop. `run_forever` repeats `run_once()` until SIGTERM or SIGINT sets stop_event. 
+    When run_once() finds no work it sleeps poll_seconds, so this is DB polling, not a queue push.
+    3. Claiming a job. run_once() tries two claimers, claim_cleanup_job and claim_index_job, and flips _prefer_cleanup 
+    after each success so neither can starve the other. The index claim passes worker_id, lease_seconds and build_fingerprint. 
+    The fingerprint (parser version, chunker version, embedding model and index version) means a worker only takes jobs it is 
+    configured to build.
+    4. The hand-off. `_run_index()` creates an `IndexJobExecution(worker_id, execution_fence)` and starts a heartbeat thread, 
+    then calls `self.publication.run(build.job.id, execution=execution)`. The execution object is passed down, 
+    and publication.py calls _guard_execution() many times. If the lease was lost (heartbeat rejected with CONFLICT), 
+    the next guard raises and the worker abandons the job quietly instead of writing stale data.
+    Inside publication. run() takes a per-job lock and calls _run_once():
+    If the job status is STAGED (already built and verified but not yet published), it jumps to _publish_staged().
+    Otherwise it runs the full pipeline: parse and chunk, write parents, write vectors, verify, then atomic publish.
+    Failure handling back in the worker. If publication.run() raises, _run_index() checks whether it still owns the lease. If it does and the error is retryable, it calls catalog.schedule_index_retry with exponential backoff and jitter. Otherwise it calls catalog.fail.
+    Where the job comes from
+
+    Something has to create the job row before the worker can claim it. In publication.py, DocumentPublication.submit() calls catalog.reserve_upload(...), which creates the document version and the index job in the DB. Presumably the upload API endpoint calls submit() when you drop a file under "快速入库", but I haven't opened the router that calls it, so I can't confirm that.
+
+    Because the API and the worker only share the database (plus the Supabase file store: submit calls push_local, and _source_path calls ensure_local), the worker can run as a separate process or on a separate machine.
+
+    The cleanup path is parallel. _run_cleanup() calls publication.cleanup_version(), which deletes Milvus rows, parent chunks and the source file for an old version.
+    """
 
     def __init__(
         self,
@@ -209,7 +235,7 @@ class DocumentPublication:
 
     def submit(self, stored_upload: StoredUpload, owner_id: int) -> UploadReservation:
         try:
-            push_local(stored_upload.object_key) 
+            push_local(stored_upload.object_key)
             knowledge_base = self.catalog.ensure_knowledge_base(
                 tenant_id=self.config.tenant_id,
                 owner_id=owner_id,
@@ -1048,14 +1074,18 @@ class DocumentPublication:
         root = self.config.upload_dir.resolve()
         path = (root / version.source_object_key).resolve()
         if path.parent != root:
-            raise AppError(ErrorCode.STORAGE_UNAVAILABLE,"文档对象清理路径无效",status_code=503,
+            raise AppError(
+                ErrorCode.STORAGE_UNAVAILABLE,
+                "文档对象清理路径无效",
+                status_code=503,
             )
         path.unlink(missing_ok=True)
-        try:                                       # NEW
+        try:  # NEW
             delete_file(version.source_object_key)
         except Exception as exc:
             raise AppError(
-                ErrorCode.STORAGE_UNAVAILABLE,"远程文档对象清理失败",
+                ErrorCode.STORAGE_UNAVAILABLE,
+                "远程文档对象清理失败",
                 status_code=503,
                 retryable=True,
             ) from exc

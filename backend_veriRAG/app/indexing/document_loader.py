@@ -1,17 +1,74 @@
-"""文档加载和分片服务"""
+"""文档加载和分片服务
+doesn't match the UI label.
+
+Pages: yes. page_number is carried through as metadata.
+Chapters: no. section_id falls back to f"page:{page_number}" unless the loader metadata carries a section_title. 
+PyPDFLoader never produces one, so a PDF's section is just its page.
+Tables: no. There is no table detection. PyPDFLoader flattens tables to plain text, so rows and columns can interleave.
+Scanned PDFs: there is no OCR fallback. A scan gives empty text and fails with "no leaf chunks generated".
+
+
+Best practice? The surrounding checks are good: page and character limits, and the sanitizer, which protects PostgreSQL from bad characters. But for a RAG system whose selling point is citations, PyPDFLoader is the weakest option. Layout-aware parsers (Docling, MinerU, PyMuPDF4LLM, Unstructured) recover headings and tables as Markdown. The PDF outline (bookmarks) is the cheapest source of real chapters.
+
+
+
+
+
+
+
+2. "Three-level chunking, parent-child context"
+
+Where and how: _split_page_to_three_levels() in the same file. It uses RecursiveCharacterTextSplitter three times, nested, once per page:
+
+Level	Size (chars)	Overlap	Role
+1	2400	400	Root parent
+2	1600	200	Middle parent
+3	800	100	Leaf (searched)
+
+Each chunk carries parent_chunk_id, root_chunk_id, chunk_level and a SHA-256 content_hash, and its ID looks like {version_id}::{filename}::p{page}::l{level}::{n}. Separators are Chinese-aware (。！？, then newline, ，, 、).
+
+In publication.py, levels 1–2 go to ParentChunkStore, and only level 3 goes to Milvus. I didn't read parent_chunk_store.py or the retrieval code that expands leaf to parent, so I can't confirm the expansion works.
+
+Why: small leaves embed precisely, and the larger parents give the LLM enough context ("small-to-big").
+
+Best practice? The pattern is established, and the ID scheme and version isolation are well done. The code has these weaknesses:
+
+Duplicated leaves: the level-1 overlap is 400 characters. Level 2 and level 3 re-split each parent separately, so text in an overlap region is chunked again under both neighbouring parents. You get near-duplicate leaves with different IDs, which can crowd the top-k with copies.
+Page-bound chunks: each page is split on its own, so a paragraph or table crossing a page break is cut.
+No semantic boundaries: the hierarchy is purely size-based, not chapter, paragraph or table. Three levels of size splitting is more complexity than the gain justifies. Two levels (section or paragraph parent, small leaf) built on real structure from step 1 would usually do better.
+Characters, not tokens: fine for Chinese-heavy text, but worth knowing.
+3. "Hybrid index: Dense + BM25 written together"
+
+Where and how:
+
+Dense: MilvusWriter.write_versioned_documents() in milvus_writer.py embeds leaf texts in batches of 50 with embedding_service.get_embeddings(). It inserts dense_embedding and text plus metadata. The collection uses an HNSW index (M=16, efConstruction=256, inner-product metric).
+BM25: the Python code never computes sparse vectors. In milvus_client.py, ensure_collection() defines a Milvus Function(type=BM25) that maps the text field to sparse_embedding. The text field uses the built-in Chinese analyzer, and the sparse field has a SPARSE_INVERTED_INDEX. Milvus tokenizes and builds BM25 vectors server-side during the same insert, which is why the write is "synchronized".
+Query time: hybrid_retrieve() runs two AnnSearchRequests, dense and BM25, each with limit = top_k*2, and fuses them with RRFRanker(k=60).
+Verify step: after the write, verify_version() checks that the chunk IDs in Milvus match the expected set exactly (no missing, extra or duplicate IDs).
+
+Best practice? Yes. This is the recommended modern setup: one collection, server-side BM25 with a language-appropriate analyzer, and RRF fusion, which needs no score normalization. Things to check:
+
+Inner-product metric assumes normalized embeddings, so confirm that in embedding.py, which I didn't read.
+There is no cross-encoder reranker after RRF. That is the usual next quality gain.
+The top_k*2 per-branch candidate pool is small.
+Dense and sparse both search only the 800-character leaves, which is correct for precision.
+What stands out beyond your three steps
+
+The publication machinery is much heavier than the retrieval logic: versioned candidates, fencing tokens, exact cross-store verification and atomic publish. It is solid engineering for safe re-uploads. The weakest link for answer quality is step 1.
+
+If you want, I can sketch a replacement for PyPDFLoader that keeps your _load_from_langchain_docs interface but emits real section_title values and Markdown tables. The change is small because the section_id plumbing already exists.
+
+
+
+"""
 
 import hashlib
 import re
 import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Dict, List
 
-from langchain_community.document_loaders import (
-    Docx2txtLoader,
-    PyPDFLoader,
-    UnstructuredExcelLoader,
-)
+from langchain_community.document_loaders import (Docx2txtLoader,    PyPDFLoader,    UnstructuredExcelLoader,)
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.core.settings import get_settings
@@ -213,13 +270,13 @@ class DocumentLoader:
     def _split_page_to_three_levels(
         self,
         text: str,
-        base_doc: Dict,
+        base_doc: dict,
         page_global_chunk_idx: int,
-    ) -> List[Dict]:
+    ) -> list[dict]:
         if not text:
             return []
 
-        root_chunks: List[Dict] = []
+        root_chunks: list[dict] = []
         page_number = int(base_doc.get("page_number", 0))
         filename = base_doc["filename"]
         document_version_id = base_doc.get("document_version_id", "")
@@ -357,13 +414,7 @@ class DocumentLoader:
             documents.extend(page_chunks)
         return documents
 
-    def load_document(
-        self,
-        file_path: str,
-        filename: str,
-        *,
-        metadata: DocumentArtifactMetadata,
-    ) -> list[dict]:
+    def load_document(self, file_path: str,filename: str,        *,        metadata: DocumentArtifactMetadata,) -> list[dict]:
         file_lower = filename.lower()
 
         if file_lower.endswith(".pdf"):
@@ -380,13 +431,7 @@ class DocumentLoader:
             from app.indexing.html_processor import load_html_for_document_loader
 
             raw_docs = load_html_for_document_loader(file_path, filename)
-            return self._load_from_langchain_docs(
-                raw_docs,
-                file_path,
-                filename,
-                doc_type,
-                metadata,
-            )
+            return self._load_from_langchain_docs(raw_docs,file_path,filename,doc_type,metadata,)
         else:
             raise ValueError(f"不支持的文件类型: {filename}")
 

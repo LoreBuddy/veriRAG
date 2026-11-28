@@ -1,8 +1,18 @@
 from __future__ import annotations
 
 # 独立进程入口必须先把项目 .env 写入 os.environ，再导入运行时模块。
-# ruff: noqa: E402
-
+"""indexing.py  main()
+  └─ worker = IndexingWorker()                      # worker.py
+       └─ __init__: self.publication = DocumentPublication(catalog=self.catalog)   # publication.py
+  └─ worker.run_forever(stop_event)
+       └─ loop: run_once()  → if no job: wait(poll_seconds)
+            └─ catalog.claim_index_job(worker_id, lease_seconds, build_fingerprint)
+                 → returns a VersionBuild (or None)
+            └─ _run_index(build)
+                 ├─ starts heartbeat thread (renews the DB lease)
+                 └─ self.publication.run(build.job.id, execution=execution)   ← the hand-off
+                      └─ _run_once(): parse → parent_store → vector_store → verify → publish
+"""
 import argparse
 import json
 import logging
@@ -11,7 +21,6 @@ from collections.abc import Sequence
 from threading import Event
 
 from app.env import load_env
-
 
 load_env()
 
@@ -104,9 +113,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         level=getattr(logging, settings.observability.log_level.upper(), logging.INFO),
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
     )
-    init_db()
-    if args.command in {"list-cleanup", "requeue-cleanup"}:
-        return _run_operator_command(args)
+    init_db() #启动时校验数据库迁移版本。
+    if args.command in {"list-cleanup", "requeue-cleanup"}:        return _run_operator_command(args)
 
     stop_event = Event()
 

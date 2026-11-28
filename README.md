@@ -505,14 +505,12 @@ npm run build
 
 ### 1. 项目全链路
 
-1. 客户端调用 `POST /v1/threads` 获取服务端生成的 `thread_<uuid>`，或选择已有且属于当前用户的
-   Thread。
+1. 客户端调用 `POST /v1/threads` 获取服务端生成的 `thread_<uuid>`，或选择已有且属于当前用户的Thread。
 2. 客户端调用 `POST /v1/threads/{thread_id}/runs`，提交 message、`idempotency_key`、期望 Thread
    version、并发策略、断连策略和可选的 `approved_tools`。
 3. Run Service 在同一事务中追加用户 Message、assistant placeholder、Run 和初始 Event，并返回
    durable `run_id` 与新的 `thread_version`。
-4. `RunAgentExecutor` 使用 owner lease 与 fencing token 领取执行，通过 `AgentRuntimeFactory` 构建
-   固定中间件链和冻结的 Model Snapshot。
+4. `RunAgentExecutor` 使用 owner lease 与 fencing token 领取执行，通过 `AgentRuntimeFactory` 构建固定中间件链和冻结的 Model Snapshot。
 5. Agent 根据当前 Skill 和问题决定是否调用知识库、天气、Web、SQL、Sandbox 或受限自定义 Tool。
 6. Tool progress、检索状态、Message delta、HITL 和 terminal 结果先进入 PostgreSQL Event Journal。
 7. 客户端通过 `GET /v1/runs/{run_id}/stream` 观察 SSE；断线后使用 `Last-Event-ID` 重连，或通过

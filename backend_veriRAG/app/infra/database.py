@@ -77,6 +77,8 @@ def schema_revisions(connection=None) -> tuple[str | None, str]:
     config = alembic_config()
     scripts = ScriptDirectory.from_config(config)
     expected = scripts.get_current_head()
+    if expected is None:
+        raise RuntimeError("无法确定数据库预期 Alembic schema 版本")
     if connection is not None:
         current = MigrationContext.configure(connection).get_current_revision()
         return current, expected

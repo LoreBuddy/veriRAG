@@ -21,7 +21,6 @@ from app.documents.catalog import (
 from app.documents.publication import DocumentPublication
 
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -88,8 +87,7 @@ class IndexingWorker:
         self.catalog = catalog or DocumentCatalog()
         self.publication = publication or DocumentPublication(catalog=self.catalog)
         self.worker_id = (worker_id or default_indexing_worker_id()).strip()[:128]
-        if not self.worker_id:
-            raise ValueError("worker_id must not be empty")
+        if not self.worker_id:raise ValueError("worker_id must not be empty")
         self.config = config or IndexingWorkerConfig.from_settings()
         self._random = random_source or random.Random()
         self._prefer_cleanup = False
@@ -97,20 +95,14 @@ class IndexingWorker:
         build_profile = getattr(publication_config, "build_profile", None)
         self.build_fingerprint = getattr(build_profile, "fingerprint", None)
 
-    def _record_heartbeat(
-        self,
-        status: WorkerStatus,
-        *,
+    def _record_heartbeat(self,        status: WorkerStatus,        *,
         current_job_id: str | None = None,
         current_job_kind: str | None = None,
     ) -> None:
         metadata = {}
-        if current_job_id:
-            metadata["current_job_id"] = current_job_id
-        if current_job_kind:
-            metadata["current_job_kind"] = current_job_kind
-        if self.build_fingerprint:
-            metadata["build_fingerprint"] = self.build_fingerprint
+        if current_job_id:            metadata["current_job_id"] = current_job_id
+        if current_job_kind:            metadata["current_job_kind"] = current_job_kind
+        if self.build_fingerprint:            metadata["build_fingerprint"] = self.build_fingerprint
         self.catalog.record_worker_heartbeat(
             worker_id=self.worker_id,
             worker_kind=self.worker_kind,
@@ -311,6 +303,7 @@ class IndexingWorker:
                     raise
         finally:
             self._stop_heartbeat(heartbeat_stop, heartbeat)
+            
 
     def run_once(self, stop_event: Event | None = None) -> bool:
         self._record_heartbeat(WorkerStatus.RUNNING)
@@ -353,8 +346,7 @@ class IndexingWorker:
         try:
             while not stop_event.is_set():
                 worked = self.run_once(stop_event)
-                if not worked:
-                    stop_event.wait(self.config.poll_seconds)
+                if not worked:                    stop_event.wait(self.config.poll_seconds)
         finally:
             self._record_heartbeat(WorkerStatus.DRAINING)
             self._record_heartbeat(WorkerStatus.STOPPED)
