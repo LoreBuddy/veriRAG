@@ -25,6 +25,10 @@ from app.schemas import (
 )
 from app.security.uploads import store_upload
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 docRou = APIRouter(tags=["documents"])
 
@@ -282,9 +286,9 @@ async def upload_document_async(
     except AppError:
         raise
     except Exception as exc:
+        logger.exception("upload failed")      # NEW: prints the real traceback
         raise AppError(
-            ErrorCode.STORAGE_UNAVAILABLE,
-            "文件保存或候选版本预留失败",
+            ErrorCode.STORAGE_UNAVAILABLE,"文件保存或候选版本预留失败",
             status_code=503,
             retryable=True,
         ) from exc
