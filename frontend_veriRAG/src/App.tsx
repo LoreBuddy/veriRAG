@@ -29,6 +29,7 @@ import emptyHistory from '@/assets/images/empty-history.webp';
 
 const CapabilityAdminPage = lazy(() => import('@/components/Capabilities/CapabilityAdminPage'));
 const KnowledgeBasePage = lazy(() => import('@/components/Documents/KnowledgeBasePage'));
+const ModelCenterPage = lazy(() => import('@/components/Models/ModelCenterPage'));
 
 type Theme = 'dark' | 'light';
 type Nav = 'chat' | 'history' | 'settings' | 'models' | 'capabilities' | 'evaluations';
@@ -1272,13 +1273,18 @@ export default function App() {
                             className={
                                 nav === 'capabilities'
                                     ? 'chat-area capability-admin-host'
+                                    : nav === 'models'
+                                        ? 'chat-area model-center-host'
                                     : nav === 'settings'
                                         ? 'chat-area knowledge-base-host'
                                         : 'chat-area'
                             }
                             style={{
                                 width: '100%',
-                                padding: nav === 'capabilities' || nav === 'settings' ? 0 : 32,
+                                padding:
+                                    nav === 'capabilities' || nav === 'settings' || nav === 'models'
+                                        ? 0
+                                        : 32,
                             }}
                         >
                             {nav === 'capabilities' ? (
@@ -1292,10 +1298,12 @@ export default function App() {
                                 <Suspense fallback={<div role="status">正在加载知识库…</div>}>
                                     <KnowledgeBasePage key={session?.username} />
                                 </Suspense>
+                            ) : nav === 'models' ? (
+                                <Suspense fallback={<div role="status">正在加载模型中心…</div>}>
+                                    <ModelCenterPage key={session?.username} />
+                                </Suspense>
                             ) : (
-                                <h1>
-                                    {nav === 'models' ? '模型中心' : 'RAG 评估'}
-                                </h1>
+                                <h1>RAG 评估</h1>
                             )}
                         </section>
                     )}

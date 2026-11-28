@@ -44,7 +44,21 @@ async function mockAdminShell(page: Page) {
   await page.route('**/auth/refresh', async (route) => {
     await route.fulfill({ status: 401, json: { detail: 'no refresh session' } });
   });
-  await page.route('**/auth/login', async (route) => {
+  await page.route('**/auth/v1/token**', async (route) => {
+    await route.fulfill({
+      json: {
+        access_token: 'supabase-test-token',
+        token_type: 'bearer',
+        expires_in: 3600,
+        refresh_token: 'supabase-refresh-token',
+        user: { id: 'admin-user-id', email: 'admin-tester@example.test' },
+      },
+    });
+  });
+  await page.route('**/auth/v1/logout**', async (route) => {
+    await route.fulfill({ status: 204 });
+  });
+  await page.route('**/auth/supabase/exchange', async (route) => {
     await route.fulfill({
       json: { access_token: 'admin-control-token', username: 'admin-tester', role: 'admin' },
     });
@@ -61,7 +75,7 @@ async function mockAdminShell(page: Page) {
 
 async function login(page: Page) {
   await page.goto('/');
-  await page.getByLabel('用户名').fill('admin-tester');
+  await page.getByLabel('邮箱').fill('admin-tester@example.test');
   await page.getByLabel('密码').fill('safe-password');
   await page.getByRole('button', { name: '进入工作台' }).click();
   await expect(page.getByRole('button', { name: '模型中心' })).toBeVisible();
