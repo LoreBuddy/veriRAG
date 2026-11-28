@@ -161,7 +161,7 @@ export default function ModelCenterPage() {
             <article>
               <small>API Key</small>
               <strong>{controlPlane.api_key_configured ? '服务端已配置' : '服务端未配置'}</strong>
-              <p>仅从服务端环境读取，前端不可录入或查看。</p>
+              <p>仅从 ARK_API_KEY 读取，前端不可录入或查看。</p>
             </article>
             <article>
               <small>Model Profiles</small>
