@@ -1,0 +1,46 @@
+name: indexing-worker
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: indexing-worker
+  cancel-in-progress: false   # never run two bursts at once
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend_veriRAG
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.12
+      - run: uv sync --frozen --no-dev
+      - name: Run worker for 10 minutes
+        run: timeout --signal=INT --kill-after=60s 10m uv run --no-sync python -m app.workers.indexing || true
+        env:
+          UPLOAD_DIR: /tmp/documents
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SUPABASE_DB: ${{ secrets.SUPABASE_DB }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          EMBEDDING_MODEL: ${{ secrets.EMBEDDING_MODEL }}
+          EMBEDDING_MODEL_REVISION: ${{ secrets.EMBEDDING_MODEL_REVISION }}
+          DENSE_EMBEDDING_DIM: ${{ secrets.DENSE_EMBEDDING_DIM }}
+          EMBEDDING_DEVICE: ${{ secrets.EMBEDDING_DEVICE }}
+          GROQ_MODEL_ID: ${{ secrets.GROQ_MODEL_ID }}
+          MILVUS_USER: ${{ secrets.MILVUS_USER }}
+          MILVUS_PWD: ${{ secrets.MILVUS_PWD }}
+          MILVUS_URL: ${{ secrets.MILVUS_URL }}
+          MILVUS_TOKEN: ${{ secrets.MILVUS_TOKEN }}
